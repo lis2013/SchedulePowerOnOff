@@ -28,14 +28,12 @@ public class AlarmInitReceiver extends BroadcastReceiver {
             if (!entity.isEnable()) {
                 continue;
             }
-            if (entity.getTime() <= 0) {
-                model.calcRTCTime();
-            }
-            if (entity.getTime() <= System.currentTimeMillis()) {
+            if (model.isExpired()) {
                 entity.setEnable(false);
                 persitence.putAlarm(model);
                 continue;
             }
+            model.calcRTCTime();
             AlarmUtils.registerAlarmEvent(context, model);
         }
     }
