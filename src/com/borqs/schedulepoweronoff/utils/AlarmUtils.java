@@ -21,6 +21,9 @@ public class AlarmUtils {
     private static WakeLock screenLock = null;
     private static WakeLock cpuLock = null;
 
+    private static PendingIntent powerOnPendingIntentCache = null;
+    private static PendingIntent powerOffPendingIntentCache = null;
+
     public static void registerAlarmEvent(Context context, AlarmModel model) {
         if (!model.isEnabled()) {
             Log.e(TAG, "alarm is not enable, register alarm event faiure");
@@ -41,27 +44,42 @@ public class AlarmUtils {
             systemAlarmType = AlarmManager.RTC_WAKEUP;
         } else if (model.isPowerOn()) {
             action = BaseConstants.ACTION_POWER_ON;
-            systemAlarmType = AlarmManager.RTC_WAKEUP; // TODO: use
+            systemAlarmType = AlarmManager.RTC_WAKEUP; // TODO: use RTC_POWEROFF_WAKEUP
         } else {
             Log.e(TAG, "Error Alarm type");
             return;
         }
         String alarmJson = model.entityString();
-		register(context, systemAlarmType, alarmJson, rtcTime, action);
-        // test code, need to repalce product code after integrate module.
-		//OffOnScheduleMocker.mockAlarm(context, systemAlarmType,  alarmJson, rtcTime, action);
-        Log.d(TAG, "Register alarm event, alarm event(" + alarmJson + ")");
-    }
-
-    private static void register(Context context, int systemAlarmType,
-            String alarmJson, long rtc, String action) {
         AlarmManager manager = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(action);
         i.putExtra(EXTRA_ALARM_DATA_NAME, alarmJson);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        manager.set(systemAlarmType, rtc, pi);
+        manager.set(systemAlarmType, rtcTime, pi);
+        if(model.isPowerOff()) {
+            powerOffPendingIntentCache = pi;
+        } else if(model.isPowerOn()) {
+            powerOnPendingIntentCache = pi;
+        }
+        // test code, need to repalce product code after integrate module.
+        //OffOnScheduleMocker.mockAlarm(context, systemAlarmType,  alarmJson, rtcTime, action);
+        Log.d(TAG, "Register alarm event, alarm event(" + alarmJson + ")");
+    }
+
+    public static void unregisterAlarmEvent(Context context, AlarmModel model) {
+        AlarmManager am = (AlarmManager) context
+                .getSystemService(Context.ALARM_SERVICE);
+        if (model.isPowerOff() && powerOffPendingIntentCache != null) {
+            am.cancel(powerOffPendingIntentCache);
+            powerOffPendingIntentCache = null;
+        } else if (model.isPowerOn() && powerOnPendingIntentCache != null) {
+            am.cancel(powerOnPendingIntentCache);
+            powerOnPendingIntentCache = null;
+        }
+        Log.d(TAG,
+                "Unregister alarm event, power on alarm event: "
+                        + model.isPowerOn());
     }
 
     /**
@@ -81,8 +99,8 @@ public class AlarmUtils {
         } else {
             // update the alarm event data, make the event be disabled and save
             // it
-			model.getEntity().setEnable(false);
-			AlarmPersistenceImpl.getInstance(ctx).putAlarm(model);
+            model.getEntity().setEnable(false);
+            AlarmPersistenceImpl.getInstance(ctx).putAlarm(model);
 
         }
     }
