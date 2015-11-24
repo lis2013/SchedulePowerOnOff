@@ -51,6 +51,7 @@
         </receiver>
         <receiver android:name="com.borqs.schedulepoweronoff.PowerOffReceiver" >
             <intent-filter>
+                <action android:name="com.borqs.action.schedule.poweroff"/>
             </intent-filter>
         </receiver>
         <receiver android:name="com.borqs.schedulepoweronoff.AlarmInitReceiver" >

@@ -34,3 +34,5 @@ Thumbs.db
 .gradle
 build/
 *.iml
+
+project.properties
