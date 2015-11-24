@@ -5,10 +5,10 @@ import java.util.List;
 public interface AlarmPersistence {
 
 
-	boolean putAlarm(AlarmEntity entry);
+	boolean putAlarm(AlarmModel entry);
 
-	AlarmEntity getAlarm(int type);
+	AlarmModel getAlarm(int type);
 
-	List<AlarmEntity> getAlarms();
+	List<AlarmModel> getAlarms();
 	
 }

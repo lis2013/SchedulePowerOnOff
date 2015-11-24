@@ -4,13 +4,15 @@ import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmEntity {
 	public final static String CLOCK_TYPE = "alarm_type";
+
 	public final static int POWEROFF_CLOCK = 0;
 	public final static int POWERON_CLOCK = 1;
-
 	private int hour;
 	private int minute;
-	private int type; //0: off clock 1: on clock
+	private int type; // 0: off clock 1: on clock
 	private boolean enable;
+	private int weekDays; // 低7位， 每一位表示一周中的某一天
+	private long time;
 
 	public int getHour() {
 		return hour;
@@ -33,7 +35,7 @@ public class AlarmEntity {
 	}
 
 	public void setType(int type) {
-		if(type != POWEROFF_CLOCK && type != POWERON_CLOCK)
+		if (type !=POWEROFF_CLOCK && type != POWERON_CLOCK)
 			throw new IllegalArgumentException("type error");
 		this.type = type;
 	}
@@ -49,5 +51,21 @@ public class AlarmEntity {
 	@Override
 	public String toString() {
 		return GSONUtils.objectToJson(this);
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public int getWeekDays() {
+		return weekDays;
+	}
+
+	public void setWeekDays(int weekDays) {
+		this.weekDays = weekDays;
 	}
 }

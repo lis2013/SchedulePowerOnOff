@@ -31,20 +31,20 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 	}
 
 	@Override
-	public synchronized boolean putAlarm(AlarmEntity entry) {
+	public synchronized boolean putAlarm(AlarmModel entry) {
 		String value = entry.toString();
 		Log.i(TAG, "putAlarm:" + value);
-		return mDataEditor.putString(generateKey(entry.getType()), value)
+		return mDataEditor.putString(generateKey(entry.getEntity().getType()), value)
 				.commit();
 	}
 
 	@Override
-	public synchronized AlarmEntity getAlarm(int type) {
+	public synchronized AlarmModel getAlarm(int type) {
 		String str = mPreferences.getString(generateKey(type), null);
 		if (str == null)
 			return null;
 		AlarmEntity entity = GSONUtils.jsonToBean(str, AlarmEntity.class);
-		return entity;
+		return new AlarmModel(entity);
 	}
 
 	private String generateKey(int type) {
@@ -52,14 +52,14 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 	}
 
 	@Override
-	public synchronized List<AlarmEntity> getAlarms() {
+	public synchronized List<AlarmModel> getAlarms() {
 		// only two type
-		List<AlarmEntity> ret = new ArrayList<AlarmEntity>();
-		AlarmEntity ae = getAlarm(AlarmEntity.POWEROFF_CLOCK);
+		List<AlarmModel> ret = new ArrayList<AlarmModel>();
+		AlarmModel ae = getAlarm(AlarmModel.POWEROFF_CLOCK);
 		if (ae != null)
 			ret.add(ae);
 
-		ae = getAlarm(AlarmEntity.POWERON_CLOCK);
+		ae = getAlarm(AlarmModel.POWERON_CLOCK);
 		if (ae != null)
 			ret.add(ae);
 
