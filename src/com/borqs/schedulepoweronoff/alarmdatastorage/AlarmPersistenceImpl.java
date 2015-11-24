@@ -41,7 +41,7 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 		onAlarm.setHour(8);
 		onAlarm.setMinute(30);
 		onAlarm.setWeekDays(31);// 11111
-		putAlarm(onAlarm);
+		putAlarm(offAlarm);
 
 	}
 
