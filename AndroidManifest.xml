@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.SET_KEYBOARD_LAYOUT" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-       <application android:label="@string/schedule_power_on_off_settings_title"
+       <application android:label="@string/schedule_power_on_off_title"
             android:icon="@mipmap/ic_launcher_settings"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Holo"
@@ -20,7 +20,7 @@
 
 
         <activity android:name="com.borqs.schedulepoweronoff.SchedulePowerOnOffActivity"
-                android:label="@string/schedule_power_on_off_settings_title"
+                android:label="@string/schedule_power_on_off_title"
                 android:configChanges="orientation|keyboardHidden|keyboard|navigation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
