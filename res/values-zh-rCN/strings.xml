@@ -78,4 +78,13 @@
     <string name="revert">"还原"</string>
     <string name="schpwr_shutdown_message">"手机将于 <xliff:g id="second">%s</xliff:g> 秒后关机"</string>
     <string name="schpwr_shutdown_message_second">"手机将于 <xliff:g id="second">%s</xliff:g> 秒后关机"</string>
+	<string-array name="week_day">
+	    <item>星期一</item>
+	    <item>星期二</item>
+	    <item>星期三</item>
+	    <item>星期四</item>
+	    <item>星期五</item>
+	    <item>星期六</item>
+	    <item>星期日</item>
+	</string-array>
 </resources>

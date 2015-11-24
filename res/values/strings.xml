@@ -88,4 +88,13 @@
     <string name="revert">Revert</string>
     <string name="schpwr_shutdown_message">"Your device will shut down in <xliff:g id="seconds">%s</xliff:g> seconds"</string>
     <string name="schpwr_shutdown_message_second">"Your device will shut down in <xliff:g id="second">%s</xliff:g> second"</string>
+	<string-array name="week_day">
+	    <item>Monday</item>
+	    <item>Tuesday</item>
+	    <item>Wednesday</item>
+	    <item>Thursday</item>
+	    <item>Friday</item>
+	    <item>Saturday</item>
+	    <item>Sunday</item>
+	</string-array>
 </resources>
