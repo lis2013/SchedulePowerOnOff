@@ -1,5 +1,6 @@
 package com.borqs.schedulepoweronoff;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,17 +21,12 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
 
-public class SchedulePowerOnOffActivity extends PreferenceActivity implements OnItemClickListener {
+public class SchedulePowerOnOffActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "SchedulePowerOnOffActivity";
     static final boolean DEBUG = true;
     private LayoutInflater mLayoutInflater;
     private ListView mList;
-    @Override
-    public boolean onContextItemSelected(final MenuItem item) {
-        return super.onContextItemSelected(item);
-    }
 
-    @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         mLayoutInflater = LayoutInflater.from(this);
@@ -51,10 +47,6 @@ public class SchedulePowerOnOffActivity extends PreferenceActivity implements On
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
     }
 
     @Override

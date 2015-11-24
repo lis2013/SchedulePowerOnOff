@@ -17,6 +17,10 @@
   
     <string name="every_day">Every day</string>
 
+    <string name="power_on_second_title">"Power on Time"</string>
+    <string name="power_off_second_title">"Power off Time"</string>
+    <string name="time_format">"AM"</string>
+
 	<string-array name="week_day">
 	    <item>Monday</item>
 	    <item>Tuesday</item>
