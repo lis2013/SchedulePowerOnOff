@@ -15,7 +15,9 @@ public class AlarmEntity {
 	private int minute;
 	private int type; // 0: off clock 1: on clock
 	private boolean enable;
-	private int weekDays; // 低7位， 每一位表示一周中的某一天, 从右到左（周一>周日）全部为0 表示 不重复
+	private int weekDays; // the low seven bits， every bit signify the day of
+							// one week, from right to left（monday--> sunday）, 0
+							// signify not repeat
 	private long time;
 	private boolean silent;
 	private String ringToneUrl;
@@ -58,7 +60,7 @@ public class AlarmEntity {
 	public String toString() {
 		return GSONUtils.objectToJson(this);
 	}
-	
+
 	public long getTime() {
 		return time;
 	}

@@ -21,7 +21,7 @@ public class GSONUtils {
 	}
 
 	/**
-	 * 将对象转换成json格式
+	 * convert object to json string
 	 *
 	 * @param ts
 	 * @return
@@ -35,7 +35,7 @@ public class GSONUtils {
 	}
 
 	/**
-	 * 将json转换成bean对象
+	 * convert json string to object
 	 *
 	 * @param jsonStr
 	 * @return
@@ -49,7 +49,7 @@ public class GSONUtils {
 	}
 
 	/**
-	 * 将json转换成bean对象
+	 * convert json string to object
 	 *
 	 * @param jsonStr
 	 * @return
@@ -63,10 +63,11 @@ public class GSONUtils {
 	}
 
 	/**
-	 * 将json格式转换成list对象，并准确指定类型
+	 * convert json string to list
 	 *
 	 * @param jsonStr
 	 * @param type
+	 *            list item type
 	 * @return
 	 */
 	public static <T> List<T> jsonToList(String jsonStr,
