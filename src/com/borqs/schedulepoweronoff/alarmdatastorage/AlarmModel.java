@@ -1,10 +1,7 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
 public class AlarmModel {
-	public final static String CLOCK_TYPE = "alarm_type";
-
-	public final static int POWEROFF_CLOCK = 0;
-	public final static int POWERON_CLOCK = 1;
+	
 	private AlarmEntity mEntity;
 	private int mWeekDays;
 
@@ -32,9 +29,9 @@ public class AlarmModel {
 
 	public void setWeekDays(int weekDay, boolean clear) {
 		if (clear) {
-			weekDay &= ~(1 << weekDay);
+			mWeekDays &= ~(1 << weekDay);
 		} else {
-			weekDay |= (1 << weekDay);
+			mWeekDays |= (1 << weekDay);
 		}
 	}
 }
