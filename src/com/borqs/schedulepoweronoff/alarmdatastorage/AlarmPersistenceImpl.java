@@ -29,19 +29,21 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 				Context.MODE_PRIVATE);
 		mDataEditor = mPreferences.edit();
 		// init value
-		AlarmEntity onAlarm = new AlarmEntity();
-		onAlarm.setEnable(false);
-		onAlarm.setHour(7);
-		onAlarm.setMinute(30);
-		onAlarm.setWeekDays(127);//1111111
-		putAlarm(onAlarm);
+		if (getAlarms().isEmpty()) {
+			AlarmEntity onAlarm = new AlarmEntity();
+			onAlarm.setEnable(false);
+			onAlarm.setHour(7);
+			onAlarm.setMinute(30);
+			onAlarm.setWeekDays(127);// 1111111
+			putAlarm(onAlarm);
 
-		AlarmEntity offAlarm = new AlarmEntity();
-		offAlarm.setEnable(false);
-		onAlarm.setHour(8);
-		onAlarm.setMinute(30);
-		onAlarm.setWeekDays(31);// 11111
-		putAlarm(offAlarm);
+			AlarmEntity offAlarm = new AlarmEntity();
+			offAlarm.setEnable(false);
+			onAlarm.setHour(8);
+			onAlarm.setMinute(30);
+			onAlarm.setWeekDays(31);// 11111
+			putAlarm(offAlarm);
+		}
 
 	}
 
