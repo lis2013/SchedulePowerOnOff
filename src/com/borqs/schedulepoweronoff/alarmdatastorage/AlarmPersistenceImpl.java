@@ -55,11 +55,11 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 	public synchronized List<AlarmModel> getAlarms() {
 		// only two type
 		List<AlarmModel> ret = new ArrayList<AlarmModel>();
-		AlarmModel ae = getAlarm(AlarmModel.POWEROFF_CLOCK);
+		AlarmModel ae = getAlarm(AlarmEntity.POWEROFF_CLOCK);
 		if (ae != null)
 			ret.add(ae);
 
-		ae = getAlarm(AlarmModel.POWERON_CLOCK);
+		ae = getAlarm(AlarmEntity.POWERON_CLOCK);
 		if (ae != null)
 			ret.add(ae);
 
