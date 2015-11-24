@@ -1,5 +1,9 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.text.TextUtils;
+
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmEntity {
@@ -11,8 +15,10 @@ public class AlarmEntity {
 	private int minute;
 	private int type; // 0: off clock 1: on clock
 	private boolean enable;
-	private int weekDays; // 低7位， 每一位表示一周中的某一天
+	private int weekDays; // 低7位， 每一位表示一周中的某一天,全部为0 表示 不重复
 	private long time;
+	private boolean silent;
+	private String ringToneUrl;
 
 	public int getHour() {
 		return hour;
@@ -35,7 +41,7 @@ public class AlarmEntity {
 	}
 
 	public void setType(int type) {
-		if (type !=POWEROFF_CLOCK && type != POWERON_CLOCK)
+		if (type != POWEROFF_CLOCK && type != POWERON_CLOCK)
 			throw new IllegalArgumentException("type error");
 		this.type = type;
 	}
@@ -67,5 +73,23 @@ public class AlarmEntity {
 
 	public void setWeekDays(int weekDays) {
 		this.weekDays = weekDays;
+	}
+
+	public boolean isSilent() {
+		return silent;
+	}
+
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
+
+	public Uri getRingToneUrl() {
+		return TextUtils.isEmpty(ringToneUrl) ? RingtoneManager
+				.getDefaultUri(RingtoneManager.TYPE_ALARM) : Uri
+				.parse(ringToneUrl);
+	}
+
+	public void setRingToneUrl(String ringToneUrl) {
+		this.ringToneUrl = ringToneUrl;
 	}
 }
