@@ -1,8 +1,11 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
+import java.util.Calendar;
+
 import android.content.Context;
 
 import com.borqs.schedulepoweronoff.R;
+import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
 
@@ -48,7 +51,8 @@ public class AlarmModel {
 		}
 		return sb.substring(0, sb.length() - CONCAT_REPEATED_SPLITOR.length());
 	}
-
+	
+	
 	/**
 	 * 
 	 * @param weekDay
@@ -68,5 +72,41 @@ public class AlarmModel {
 			weekDays |= (1 << weekDay);
 		}
 		mEntity.setWeekDays(weekDays);
+	}
+
+	public boolean isExpired() {
+		return !isRepeated() && isBeforeNowTime();
+	}
+
+	private boolean isBeforeNowTime() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+
+		int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
+		int nowMinute = calendar.get(Calendar.MINUTE);
+
+		int hour = mEntity.getHour();
+		int minutes = mEntity.getMinute();
+		return (hour < nowHour || hour == nowHour && minutes <= nowMinute);
+	}
+	
+	public static AlarmModel convertToObj(String jsonStr){
+		return new AlarmModel(GSONUtils.jsonToBean(jsonStr, AlarmEntity.class));
+	}
+	
+	public void calcRTCTime() {
+		if (!isExpired()) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			if (isBeforeNowTime()) {
+				calendar.add(Calendar.DAY_OF_YEAR, 1);
+			}
+			calendar.set(Calendar.HOUR_OF_DAY, mEntity.getHour());
+			calendar.set(Calendar.MINUTE, mEntity.getMinute());
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			//TODO
+			int today = calendar.get(Calendar.DAY_OF_WEEK);
+		}
 	}
 }

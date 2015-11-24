@@ -58,7 +58,7 @@ public class AlarmEntity {
 	public String toString() {
 		return GSONUtils.objectToJson(this);
 	}
-
+	
 	public long getTime() {
 		return time;
 	}
