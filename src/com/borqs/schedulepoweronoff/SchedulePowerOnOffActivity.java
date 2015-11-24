@@ -28,6 +28,8 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         super.onCreate(icicle);
         mLayoutInflater = LayoutInflater.from(this);
         View v = mLayoutInflater.inflate(R.layout.power_on_off_activity, null);
+        AlarmModelTest t = new AlarmModelTest();
+        t.run();
         setContentView(v);
         mList = (ListView) v.findViewById(android.R.id.list);
         AlarmPersistence alarmPersistence = AlarmPersistenceImpl.getInstance(this);

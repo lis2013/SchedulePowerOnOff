@@ -36,17 +36,18 @@ public class AlarmModel {
 		return (mEntity.getWeekDays() ^ 0x7F) == 0;
 	}
 
-    public boolean isPowerOn() {
-        return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
-    }
+	public boolean isPowerOn() {
+		return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
+	}
 
-    public String getTime() {
-        return mEntity.getHour() + ":" + mEntity.getMinute() + "";
-    }
+	public String getTime() {
+		return mEntity.getHour() + ":" + mEntity.getMinute() + "";
+	}
 
-    public boolean isEnabled() {
-        return mEntity.isEnable();
-    }
+	public boolean isEnabled() {
+		return mEntity.isEnable();
+	}
+
 	public String getRepeatedStr(Context context) {
 		if (!isRepeated())
 			return NO_REPEATED_SHOWER;
@@ -118,10 +119,7 @@ public class AlarmModel {
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
 
-			if (isBeforeNow()) {
-				// must be repeat, else expired
-				calendar.add(Calendar.DAY_OF_YEAR, 1);
-			} else if (!isRepeated()) {
+			if (!isRepeated()) {
 				// not repeat, only to next day
 				calendar.add(Calendar.DAY_OF_YEAR, 1);
 				mEntity.setTime(calendar.getTimeInMillis());
@@ -139,7 +137,11 @@ public class AlarmModel {
 					todayOfWeekDays = 6;
 				}
 			}
-
+			
+			if(isWeekDaySet(todayOfWeekDays) && isBeforeNow()){
+				calendar.add(Calendar.DAY_OF_YEAR, 1);
+			}
+			
 			int i = 0;
 			// which day is set
 			for (; i < WEEK_DAY_COUNT; i++) {
