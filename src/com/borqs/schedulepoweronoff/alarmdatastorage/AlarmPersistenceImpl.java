@@ -65,8 +65,9 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 		String str = mPreferences.getString(generateKey(type), null);
 		if (str == null)
 			return null;
+		Log.i(TAG, "getAlarm:" + str);
 		AlarmEntity entity = GSONUtils.jsonToBean(str, AlarmEntity.class);
-		return new AlarmModel(entity);
+		return entity == null ? null : new AlarmModel(entity);
 	}
 
 	private String generateKey(int type) {
