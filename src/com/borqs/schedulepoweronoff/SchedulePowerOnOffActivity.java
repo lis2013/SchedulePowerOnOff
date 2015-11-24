@@ -17,7 +17,7 @@ import android.widget.Switch;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntry;
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
 
 public class SchedulePowerOnOffActivity extends PreferenceActivity implements OnItemClickListener {
@@ -63,7 +63,7 @@ public class SchedulePowerOnOffActivity extends PreferenceActivity implements On
         Intent intent = new Intent();
         intent.setClass(this, com.borqs.schedulepoweronoff.TimeSetActivity.class);
         final Bundle bundle = new Bundle();
-        bundle.putInt(AlarmEntry.ALARM_Type, (int) id);
+        bundle.putInt(AlarmEntity.CLOCK_TYPE, (int) id);
         intent.putExtras(bundle);
         startActivity(intent);
     }
