@@ -28,13 +28,33 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 		mPreferences = context.getSharedPreferences("power_clock",
 				Context.MODE_PRIVATE);
 		mDataEditor = mPreferences.edit();
+		// init value
+		AlarmEntity onAlarm = new AlarmEntity();
+		onAlarm.setEnable(false);
+		onAlarm.setHour(7);
+		onAlarm.setMinute(30);
+		onAlarm.setWeekDays(127);//1111111
+		putAlarm(onAlarm);
+
+		AlarmEntity offAlarm = new AlarmEntity();
+		offAlarm.setEnable(false);
+		onAlarm.setHour(8);
+		onAlarm.setMinute(30);
+		onAlarm.setWeekDays(31);// 11111
+		putAlarm(onAlarm);
+
 	}
 
 	@Override
-	public synchronized boolean putAlarm(AlarmModel entry) {
-		String value = entry.toString();
+	public synchronized boolean putAlarm(AlarmModel entity) {
+		return putAlarm(entity.getEntity());
+	}
+
+	@Override
+	public boolean putAlarm(AlarmEntity entity) {
+		String value = entity.toString();
 		Log.i(TAG, "putAlarm:" + value);
-		return mDataEditor.putString(generateKey(entry.getEntity().getType()), value)
+		return mDataEditor.putString(generateKey(entity.getType()), value)
 				.commit();
 	}
 
