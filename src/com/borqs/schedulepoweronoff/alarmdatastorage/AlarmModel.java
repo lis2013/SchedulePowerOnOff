@@ -33,6 +33,17 @@ public class AlarmModel {
 		return (mEntity.getWeekDays() ^ 0x7F) == 0;
 	}
 
+    public boolean isPowerOn() {
+        return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
+    }
+
+    public String getTime() {
+        return mEntity.getHour() + ":" + mEntity.getMinute() + "";
+    }
+
+    public boolean isEnabled() {
+        return mEntity.isEnable();
+    }
 	public String getRepeatedStr(Context context) {
 		if (!isRepeated())
 			return NO_REPEATED_SHOWER;

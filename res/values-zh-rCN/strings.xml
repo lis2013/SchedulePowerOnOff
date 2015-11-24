@@ -19,7 +19,6 @@
     <string name="power_on_second_title">"开机时间"</string>
     <string name="power_off_second_title">"关机时间"</string>
     <string name="time_format">"上午"</string>
-    <string name="time">"8:00"</string>
   
     <string name="every_day">"每天"</string>
 
