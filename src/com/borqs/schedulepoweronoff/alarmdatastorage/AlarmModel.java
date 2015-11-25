@@ -111,7 +111,7 @@ public class AlarmModel {
 	}
 
 	public void calcRTCTime() {
-		if (!isExpired()) {
+		if (!isExpired() && mEntity.isEnable()) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			calendar.set(Calendar.HOUR_OF_DAY, mEntity.getHour());
@@ -137,11 +137,11 @@ public class AlarmModel {
 					todayOfWeekDays = 6;
 				}
 			}
-			
-			if(isWeekDaySet(todayOfWeekDays) && isBeforeNow()){
+
+			if (isWeekDaySet(todayOfWeekDays) && isBeforeNow()) {
 				calendar.add(Calendar.DAY_OF_YEAR, 1);
 			}
-			
+
 			int i = 0;
 			// which day is set
 			for (; i < WEEK_DAY_COUNT; i++) {
@@ -155,4 +155,18 @@ public class AlarmModel {
 			mEntity.setTime(calendar.getTimeInMillis());
 		}
 	}
+
+	/**
+	 * enable clock
+	 * 
+	 * @param persistence
+	 * @param enable
+	 */
+	public void enable(Context context, boolean enable) {
+		mEntity.setEnable(enable);
+		calcRTCTime();
+		AlarmPersistenceImpl.getInstance(context).putAlarm(this);
+		//TODO register to framework;
+	}
+	
 }

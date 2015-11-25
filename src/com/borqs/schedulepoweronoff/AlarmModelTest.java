@@ -8,14 +8,23 @@ public class AlarmModelTest {
 	public void run() {
 		AlarmModel am = null;
 		AlarmEntity ae = null;
+		long ret = 0;
 		ae = new AlarmEntity();
 		ae.setHour(3);
 		ae.setMinute(30);
 		ae.setWeekDays(127);
 		am = new AlarmModel(ae);
 		am.calcRTCTime();
-		long ret = am.getEntity().getTime();
-
+		ret = am.getEntity().getTime();
+		
+		ae = new AlarmEntity();
+		ae.setHour(3);
+		ae.setMinute(30);
+		ae.setWeekDays(64);
+		am = new AlarmModel(ae);
+		am.calcRTCTime();
+		ret = am.getEntity().getTime();
+		
 		ae = new AlarmEntity();
 		ae.setHour(3);
 		ae.setMinute(30);
