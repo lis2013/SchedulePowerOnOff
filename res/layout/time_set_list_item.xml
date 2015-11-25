@@ -31,8 +31,8 @@
         android:id="@+id/show_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/info"
-        android:src="@drawable/show_icon_time" />
+        android:layout_marginRight="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/next" />
 </RelativeLayout>
