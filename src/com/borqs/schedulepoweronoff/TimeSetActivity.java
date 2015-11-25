@@ -63,12 +63,10 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
                     int position, long id) {
                 switch (position) {
                 case 0:
-                    new TimePickerDialog(
-                            TimeSetActivity.this,
-                            TimeSetActivity.this,
-                            mAlarmModel.getEntity().getHour(),
-                            mAlarmModel.getEntity().getMinute(),
-                            DateFormat
+					new TimePickerDialog(TimeSetActivity.this,
+							TimeSetActivity.this, mAlarmModel.getEntity()
+									.getHour(), mAlarmModel.getEntity()
+									.getMinute(), DateFormat
                                     .is24HourFormat(TimeSetActivity.this))
                             .show();
                     break;
@@ -83,7 +81,11 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
     private SimpleAdapter getListAdapter() {
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
-        String[] info = { mAlarmModel.getTime(), mAlarmModel.getRepeatedStr(this) };
+		String[] info = {
+				mAlarmModel.getTime(this)
+						+ (mAlarmModel.isAm() ? getString(R.string.time_format_morning)
+								: getString(R.string.time_format_afternoon)),
+				mAlarmModel.getRepeatedStr(this) };
         int[] imageids = { R.drawable.next,
                 R.drawable.next };
         List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
@@ -98,7 +100,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems,
                 R.layout.time_set_list_item, new String[] { "title", "info",
                         "imageid" }, new int[] { R.id.title_text,
-                        R.id.info_text, R.id.show_button }) ;
+						R.id.info_text, R.id.show_button }) ;
         return simpleAdapter;
     }
 

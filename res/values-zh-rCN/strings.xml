@@ -17,25 +17,28 @@
     <string name="schedule_power_on_off_set">设置定时开关机</string>
     <string name="set_power_on">设置定时开机</string>
     <string name="set_power_off">设置定时关机</string>
+    <string name="never">从不</string>
     <string name="reset">"重置"</string>
     <string name="finish">"完成"</string>
     <string name="time_text">"时间"</string>
     <string name="repeat">"重复"</string>
     <string name="power_on_second_title">"开机时间"</string>
     <string name="power_off_second_title">"关机时间"</string>
-    <string name="time_format">"上午"</string>
+    <string name="time_format_morning">"上午"</string>
+    <string name="time_format_afternoon">"下午"</string>
     <string name="ok">"确定"</string>
     <string name="cancel">"取消"</string>
     <string name="every_day">"每天"</string>
 
-
-  <string-array name="week_day">
-      <item>周一</item>
-      <item>周二</item>
-      <item>周三</item>
-      <item>周四</item>
-      <item>周五</item>
-      <item>周六</item>
-      <item>周日</item>
-  </string-array>
+	<string name="time_power_on">开机时间设置为距离现在 <xliff:g id="day">%1$s</xliff:g>天 <xliff:g id="hour">%2$s</xliff:g> 小时 <xliff:g id="minutes">%3$s</xliff:g>分钟</string>
+    <string name="time_power_off">关机时间设置为距离现在 <xliff:g id="day">%1$s</xliff:g>天 <xliff:g id="hour">%2$s</xliff:g>小时 <xliff:g id="minutes">%3$s</xliff:g>分钟 </string>
+	<string-array name="week_day">
+	    <item>周一</item>
+	    <item>周二</item>
+	    <item>周三</item>
+	    <item>周四</item>
+	    <item>周五</item>
+	    <item>周六</item>
+	    <item>周日</item>
+	</string-array>
 </resources>

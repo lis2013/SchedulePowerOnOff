@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="every_day">Every day</string>
+    <string name="never">Never</string>
     <string name="shutdown_dialog_title">Power Off</string>
     <string name="shutdown_dialog_message">Shut down after <xliff:g id="time">%1$d</xliff:g> seconds.</string>
     <string name="power_on_second_title">"Power on Time"</string>
@@ -14,6 +15,9 @@
     <string name="repeat">"Repeat"</string>
     <string name="ok">"OK"</string>
     <string name="cancel">"Cancel"</string>
+    
+     <string name="time_format_morning">"morning"</string>
+    <string name="time_format_afternoon">"afternoon"</string>
 
     <string-array name="week_day">
         <item>Monday</item>

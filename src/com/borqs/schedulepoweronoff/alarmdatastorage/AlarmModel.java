@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
@@ -11,7 +12,6 @@ import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
 	private static final String CONCAT_REPEATED_SPLITOR = " ";
-	private static final String NO_REPEATED_SHOWER = "";
 	private static final int WEEK_DAY_COUNT = 7;
 
 	private AlarmEntity mEntity;
@@ -50,13 +50,27 @@ public class AlarmModel {
 		return mEntity.getType() == AlarmEntity.POWEROFF_CLOCK;
 	}
 
-	public String getTime() {
-		String ret =  mEntity.getHour() + ":";
+	public String getTime(Context context) {
+		int hour = mEntity.getHour();
 		int minute = mEntity.getMinute();
-		if(minute < 10){
-			return ret + "0" + mEntity.getMinute();
+		if (!DateFormat.is24HourFormat(context)) {
+			if (hour != 12)
+				hour = hour % 12;
 		}
-		return  ret + mEntity.getMinute();
+
+		StringBuilder sb = new StringBuilder();
+		if (hour < 10) {
+			sb.append(0).append(hour);
+		}else{
+			sb.append(hour);
+		}
+		sb.append(":");
+		if (minute < 10) {
+			sb.append(0).append(minute);
+		}else{
+			sb.append(minute);
+		}
+		return sb.toString();
 	}
 
 	public long getRTCTime() {
@@ -69,7 +83,7 @@ public class AlarmModel {
 
 	public String getRepeatedStr(Context context) {
 		if (!isRepeated())
-			return NO_REPEATED_SHOWER;
+			return context.getString(R.string.never);
 
 		if (isEveryDay()) {
 			return context.getText(R.string.every_day).toString();
@@ -205,4 +219,9 @@ public class AlarmModel {
 		return mEntity.toString();
 	}
 
+	public boolean isAm() {
+		int hour = mEntity.getHour();
+		int miutes = mEntity.getMinute();
+		return hour > 0 && hour < 12 || hour == 0 && miutes == 0;
+	}
 }
