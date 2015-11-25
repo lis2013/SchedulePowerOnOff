@@ -28,7 +28,6 @@ public class AlarmModel {
 	public AlarmEntity getEntity() {
 		return mEntity;
 	}
-	
 
 	public void setTime(Context ctx, int hour, int minute) {
 		this.mEntity.setHour(hour);
@@ -36,7 +35,6 @@ public class AlarmModel {
 		AlarmPersistenceImpl.getInstance(ctx).putAlarm(this);
 	}
 
-	
 	public boolean isRepeated() {
 		return mEntity.getWeekDays() > 0;
 	}
@@ -54,7 +52,12 @@ public class AlarmModel {
 	}
 
 	public String getTime() {
-		return mEntity.getHour() + ":" + mEntity.getMinute() + "";
+		String ret =  mEntity.getHour() + ":";
+		int minute = mEntity.getMinute();
+		if(minute < 10){
+			return ret + "0" + mEntity.getMinute();
+		}
+		return  ret + mEntity.getMinute();
 	}
 
 	public long getRTCTime() {
@@ -111,7 +114,7 @@ public class AlarmModel {
 
 	private boolean isBeforeNowRTCTime() {
 		if (mEntity.getTime() > 0) {
-			return mEntity.getTime() < System.currentTimeMillis();
+			return mEntity.getTime() <= System.currentTimeMillis();
 		} else {
 			// never calculate rtc
 			return false;
@@ -138,52 +141,50 @@ public class AlarmModel {
 	}
 
 	public void calcRTCTime() {
-		if (!isExpired()) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTimeInMillis(System.currentTimeMillis());
-			calendar.set(Calendar.HOUR_OF_DAY, mEntity.getHour());
-			calendar.set(Calendar.MINUTE, mEntity.getMinute());
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.set(Calendar.HOUR_OF_DAY, mEntity.getHour());
+		calendar.set(Calendar.MINUTE, mEntity.getMinute());
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 
-			if (!isRepeated() && isBeforeNowHourMinutes()) {
-				// not repeat, only to next day
-				calendar.add(Calendar.DAY_OF_YEAR, 1);
-				mEntity.setTime(calendar.getTimeInMillis());
-				return;
-			} else if (!isRepeated()) {
-				mEntity.setTime(calendar.getTimeInMillis());
-				return;
-			}
-
-			// if sunday is the first day
-			Calendar now = Calendar.getInstance();
-			boolean isFirtDayOfWeekSunday = (now.getFirstDayOfWeek() == Calendar.SUNDAY);
-			int todayOfWeekDays = now.get(Calendar.DAY_OF_WEEK);
-			if (isFirtDayOfWeekSunday) {
-				// ensure monday is the 0 day,...,the sunday is the 6 day
-				todayOfWeekDays = todayOfWeekDays - 2;
-				if (todayOfWeekDays == -1) {
-					todayOfWeekDays = 6;
-				}
-			}
-
-			if (isWeekDaySet(todayOfWeekDays) && isBeforeNowHourMinutes()) {
-				calendar.add(Calendar.DAY_OF_YEAR, 1);
-			}
-
-			int i = 0;
-			// which day is set
-			for (; i < WEEK_DAY_COUNT; i++) {
-				if (isWeekDaySet((todayOfWeekDays + i) % WEEK_DAY_COUNT)) {
-					break;
-				}
-			}
-			if (i != 0) {
-				calendar.add(Calendar.DAY_OF_WEEK, i);
-			}
+		if (!isRepeated() && isBeforeNowHourMinutes()) {
+			// not repeat, only to next day
+			calendar.add(Calendar.DAY_OF_YEAR, 1);
 			mEntity.setTime(calendar.getTimeInMillis());
+			return;
+		} else if (!isRepeated()) {
+			mEntity.setTime(calendar.getTimeInMillis());
+			return;
 		}
+
+		// if sunday is the first day
+		Calendar now = Calendar.getInstance();
+		boolean isFirtDayOfWeekSunday = (now.getFirstDayOfWeek() == Calendar.SUNDAY);
+		int todayOfWeekDays = now.get(Calendar.DAY_OF_WEEK);
+		if (isFirtDayOfWeekSunday) {
+			// ensure monday is the 0 day,...,the sunday is the 6 day
+			todayOfWeekDays = todayOfWeekDays - 2;
+			if (todayOfWeekDays == -1) {
+				todayOfWeekDays = 6;
+			}
+		}
+
+		if (isWeekDaySet(todayOfWeekDays) && isBeforeNowHourMinutes()) {
+			calendar.add(Calendar.DAY_OF_YEAR, 1);
+		}
+
+		int i = 0;
+		// which day is set
+		for (; i < WEEK_DAY_COUNT; i++) {
+			if (isWeekDaySet((todayOfWeekDays + i) % WEEK_DAY_COUNT)) {
+				break;
+			}
+		}
+		if (i != 0) {
+			calendar.add(Calendar.DAY_OF_WEEK, i);
+		}
+		mEntity.setTime(calendar.getTimeInMillis());
 	}
 
 	/**
