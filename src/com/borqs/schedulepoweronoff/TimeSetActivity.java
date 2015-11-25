@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -21,119 +23,127 @@ import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
-public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener{
-    private ListView mList;
-    private int mTimeType;
-    private String mSetTime;
-    private String mRepeat;
-    private ImageButton mResetButton;
-    private ImageButton mFinishButton;
-    private View mPopLayout;
-    private PopupWindow mPopWindow;
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.time_set_layout);
-        mTimeType = getIntent().getIntExtra(AlarmEntity.CLOCK_TYPE, 0);
-        mSetTime = getIntent().getStringExtra(AlarmEntity.SET_TIME);
-        mRepeat = getIntent().getStringExtra(AlarmEntity.REPEAT_INFO);
-        mResetButton = (ImageButton)findViewById(R.id.reset);
-        mFinishButton = (ImageButton)findViewById(R.id.finish);
-        mResetButton.setOnClickListener(this);
-        mFinishButton.setOnClickListener(this);
-        if (mTimeType == AlarmEntity.POWERON_CLOCK) {
-            setTitle(R.string.set_power_on);
-        } else {
-            setTitle(R.string.set_power_off);
-        }
-        mList = (ListView) findViewById(android.R.id.list);
-        SimpleAdapter simpleAdapter = getListAdapter();
-        mList.setAdapter(simpleAdapter);
-    }
+public class TimeSetActivity extends Activity implements
+		TimePickerDialog.OnTimeSetListener, OnClickListener {
+	private ListView mList;
+	private int mTimeType;
+	private ImageButton mResetButton;
+	private ImageButton mFinishButton;
+	private View mPopLayout;
+	private PopupWindow mPopWindow;
+	private AlarmModel mAlarmModel;
 
-    private SimpleAdapter getListAdapter() {
-        String[] title = { this.getResources().getString(R.string.time_text), this.getResources().getString(R.string.repeat) };  
-        String[] info = {mSetTime, mRepeat};  
-        int[] imageids = { R.drawable.show_icon_time, R.drawable.show_icon_repeat }; 
-        List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();  
-        for (int i = 0; i < title.length; i++) {  
-            Map<String, Object> listem = new HashMap<String, Object>();  
-            listem.put("title", title[i]);
-            listem.put("info", info[i]); 
-            listem.put("imageid", imageids[i]);
-            listems.add(listem);  
-        }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.time_set_layout);
+		mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras()
+				.getString(AlarmModel.ENTITY));
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems,  
-                R.layout.time_set_list_item, new String[] { "title", "info", "imageid" },  
-                new int[] {R.id.title_text,R.id.info_text,R.id.show_button}) {
+		mResetButton = (ImageButton) findViewById(R.id.reset);
+		mFinishButton = (ImageButton) findViewById(R.id.finish);
+		mResetButton.setOnClickListener(this);
+		mFinishButton.setOnClickListener(this);
+		if (mTimeType == AlarmEntity.POWERON_CLOCK) {
+			setTitle(R.string.set_power_on);
+		} else {
+			setTitle(R.string.set_power_off);
+		}
+		mList = (ListView) findViewById(android.R.id.list);
+		updateListView();
+	}
 
-                    @Override
-                    public View getView(int position, View convertView, ViewGroup parent) {
-                        final int pos = position;
-                        final View view=super.getView(position, convertView, parent);
-                        ImageButton show_button = (ImageButton)view.findViewById(R.id.show_button);
-                        show_button.setOnClickListener(new OnClickListener(){
-                            @Override
-                            public void onClick(View v) {
-                                switch (pos){
-                                    case 0:
-                                        new TimePickerDialog(TimeSetActivity.this, TimeSetActivity.this, 20, 00, DateFormat.is24HourFormat(TimeSetActivity.this)).show();
-                                        break;
-                                    case 1:
-                                        showRepeatPopupWindow();
-                                        break;
-                                }
-                            }
-                            
-                        });
-                        return view;
-                    }
-            
-            
-        };
-        return simpleAdapter;
-    }
+	private void updateListView() {
+		SimpleAdapter adapter = getListAdapter();
+		mList.setAdapter(adapter);
+		mList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				switch (position) {
+				case 0:
+					new TimePickerDialog(
+							TimeSetActivity.this,
+							TimeSetActivity.this,
+							mAlarmModel.getEntity().getHour(),
+							mAlarmModel.getEntity().getMinute(),
+							DateFormat
+									.is24HourFormat(TimeSetActivity.this))
+							.show();
+					break;
+				case 1:
+					showRepeatPopupWindow();
+					break;
+				}
+			}
+		});
+	}
 
-    private void showRepeatPopupWindow() {
-       if (mPopLayout == null ) {
-           mPopLayout = getLayoutInflater().inflate(R.layout.set_repeat, null);
-       }
-    }
+	private SimpleAdapter getListAdapter() {
+		String[] title = { this.getResources().getString(R.string.time_text),
+				this.getResources().getString(R.string.repeat) };
+		String[] info = { mAlarmModel.getTime(), mAlarmModel.getRepeatedStr(this) };
+		int[] imageids = { R.drawable.show_icon_time,
+				R.drawable.show_icon_repeat };
+		List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < title.length; i++) {
+			Map<String, Object> listem = new HashMap<String, Object>();
+			listem.put("title", title[i]);
+			listem.put("info", info[i]);
+			listem.put("imageid", imageids[i]);
+			listems.add(listem);
+		}
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
+		SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems,
+				R.layout.time_set_list_item, new String[] { "title", "info",
+						"imageid" }, new int[] { R.id.title_text,
+						R.id.info_text, R.id.show_button }) ;
+		return simpleAdapter;
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+	private void showRepeatPopupWindow() {
+		if (mPopLayout == null) {
+			mPopLayout = getLayoutInflater().inflate(R.layout.set_repeat, null);
+		}
+	}
 
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch(id) {
-        case R.id.reset:
-            finish();
-            break;
-        case R.id.finish:
-            // 1.set next power on/off time
-            //2. popup toast
-            break;          
-        }
-        
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		mAlarmModel.setTime(this, hourOfDay, minute);
+		updateListView();
+	}
+
+	@Override
+	public void onClick(View v) {
+		int id = v.getId();
+		switch (id) {
+		case R.id.reset:
+			finish();
+			break;
+		case R.id.finish:
+			mAlarmModel.enable(this, mAlarmModel.isEnabled());
+			AlarmUtils.toastAlarmPeriod(this, mAlarmModel);
+			break;
+		}
+
+	}
 
 }

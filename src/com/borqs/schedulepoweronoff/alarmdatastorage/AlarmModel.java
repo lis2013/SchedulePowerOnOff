@@ -1,16 +1,16 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.borqs.schedulepoweronoff.R;
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
-
+	public static final String ENTITY = "entity";
 	private static final String CONCAT_REPEATED_SPLITOR = " ";
 	private static final String NO_REPEATED_SHOWER = "";
 	private static final int WEEK_DAY_COUNT = 7;
@@ -28,7 +28,15 @@ public class AlarmModel {
 	public AlarmEntity getEntity() {
 		return mEntity;
 	}
+	
 
+	public void setTime(Context ctx, int hour, int minute) {
+		this.mEntity.setHour(hour);
+		this.mEntity.setMinute(minute);
+		AlarmPersistenceImpl.getInstance(ctx).putAlarm(this);
+	}
+
+	
 	public boolean isRepeated() {
 		return mEntity.getWeekDays() > 0;
 	}
@@ -41,14 +49,18 @@ public class AlarmModel {
 		return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
 	}
 
+	public boolean isPowerOff() {
+		return mEntity.getType() == AlarmEntity.POWEROFF_CLOCK;
+	}
+
 	public String getTime() {
 		return mEntity.getHour() + ":" + mEntity.getMinute() + "";
 	}
-	
-	public long getRTCTime(){
+
+	public long getRTCTime() {
 		return mEntity.getTime();
 	}
-	
+
 	public boolean isEnabled() {
 		return mEntity.isEnable();
 	}
@@ -96,20 +108,17 @@ public class AlarmModel {
 	public boolean isExpired() {
 		return !isRepeated() && isBeforeNowRTCTime();
 	}
-	
-	private boolean isBeforeNowRTCTime(){
-		if(mEntity.getTime()  > 0){
-			//rtc is  calcuated before
-			Date now = new Date(System.currentTimeMillis());
-			Date rtcTime = new Date(mEntity.getTime());
-			return rtcTime.before(now);
-		}else{
-			//never calculate rtc
+
+	private boolean isBeforeNowRTCTime() {
+		if (mEntity.getTime() > 0) {
+			return mEntity.getTime() < System.currentTimeMillis();
+		} else {
+			// never calculate rtc
 			return false;
 		}
-		
+
 	}
-	
+
 	private boolean isBeforeNowHourMinutes() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
@@ -123,13 +132,13 @@ public class AlarmModel {
 
 	public static AlarmModel convertToObj(String jsonStr) {
 		if (TextUtils.isEmpty(jsonStr)) {
-			return null;
+			throw new IllegalArgumentException(jsonStr + " is empty.");
 		}
 		return new AlarmModel(GSONUtils.jsonToBean(jsonStr, AlarmEntity.class));
 	}
 
 	public void calcRTCTime() {
-		if ( mEntity.isEnable() &&  !isExpired()) {
+		if (!isExpired()) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			calendar.set(Calendar.HOUR_OF_DAY, mEntity.getHour());
@@ -137,12 +146,12 @@ public class AlarmModel {
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
 
-			if (!isRepeated()  && isBeforeNowHourMinutes()) {
+			if (!isRepeated() && isBeforeNowHourMinutes()) {
 				// not repeat, only to next day
 				calendar.add(Calendar.DAY_OF_YEAR, 1);
 				mEntity.setTime(calendar.getTimeInMillis());
 				return;
-			}else if(!isRepeated()){
+			} else if (!isRepeated()) {
 				mEntity.setTime(calendar.getTimeInMillis());
 				return;
 			}
@@ -187,7 +196,13 @@ public class AlarmModel {
 		mEntity.setEnable(enable);
 		calcRTCTime();
 		AlarmPersistenceImpl.getInstance(context).putAlarm(this);
-		//TODO register to framework;
+		if (enable) {
+			AlarmUtils.registerAlarmEvent(context, this);
+		}
 	}
-	
+
+	public String entityString() {
+		return mEntity.toString();
+	}
+
 }

@@ -26,7 +26,8 @@
             android:textSize="15sp" />
     </LinearLayout>
 
-    <ImageButton
+    <ImageView
+        android:focusable="false"
         android:id="@+id/show_button"
         android:layout_width="30dp"
         android:layout_height="30dp"

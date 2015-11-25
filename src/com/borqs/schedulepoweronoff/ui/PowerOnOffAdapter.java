@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -89,8 +90,7 @@ public class PowerOnOffAdapter extends BaseAdapter{
 						boolean isChecked) {
 					alarmModel.enable(mContext, isChecked);
                     if (isChecked) {
-                    	Toast t = Toast.makeText(mContext, formartAlarmRtcTimePeriod(alarmModel), Toast.LENGTH_SHORT);
-                    	t.show();
+                    	AlarmUtils.toastAlarmPeriod(mContext, alarmModel);
                     }
 				}
              });
@@ -98,18 +98,7 @@ public class PowerOnOffAdapter extends BaseAdapter{
 		return convertView;
 	}
 	
-	private String formartAlarmRtcTimePeriod(AlarmModel model){
-		long period = model.getRTCTime() - System.currentTimeMillis();
-		long hours  = period/(1000 * 60 * 60);
-		long minutes = period/(1000 * 60) % 60;
-		long day = hours / 24;
-		hours = hours % 24;
-		if(model.isPowerOn()){
-			return mContext.getResources().getString(R.string.time_power_on, day, hours, minutes);
-		}else{
-			return mContext.getResources().getString(R.string.time_power_off, day, hours, minutes);
-		}
-	}
+	
 	
 	class ViewHolder{
         public TextView timeFormat;

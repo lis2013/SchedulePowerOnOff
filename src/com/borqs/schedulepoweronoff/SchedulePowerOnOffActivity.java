@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistence;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistenceImpl;
@@ -58,11 +57,7 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         AlarmModel alarmModel = mAlarmModel.get(pos);
         Intent intent = new Intent();
         intent.setClass(this, com.borqs.schedulepoweronoff.TimeSetActivity.class);
-        final Bundle bundle = new Bundle();
-        bundle.putInt(AlarmEntity.CLOCK_TYPE, (int) id);
-        bundle.putString(AlarmEntity.SET_TIME, alarmModel.getTime());
-        bundle.putString(AlarmEntity.REPEAT_INFO, alarmModel.getRepeatedStr(this));
-        intent.putExtras(bundle);
+        intent.putExtra(AlarmModel.ENTITY, alarmModel.entityString());
         startActivity(intent);
     }
 }

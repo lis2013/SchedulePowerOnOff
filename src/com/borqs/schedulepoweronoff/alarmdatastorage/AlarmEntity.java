@@ -1,15 +1,10 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.text.TextUtils;
 
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmEntity {
     public final static String CLOCK_TYPE = "alarm_type";
-    public final static String SET_TIME = "current_time";
-    public final static String REPEAT_INFO = "repeat_info";  
 	public final static int POWEROFF_CLOCK = 1;
 	public final static int POWERON_CLOCK = 0;
 	private int hour;
@@ -20,8 +15,6 @@ public class AlarmEntity {
 							// one week, from right to left（monday--> sunday）, 0
 							// signify not repeat
 	private long time;
-	private boolean silent;
-	private String ringToneUrl;
 
 	public int getHour() {
 		return hour;
@@ -76,23 +69,5 @@ public class AlarmEntity {
 
 	public void setWeekDays(int weekDays) {
 		this.weekDays = weekDays;
-	}
-
-	public boolean isSilent() {
-		return silent;
-	}
-
-	public void setSilent(boolean silent) {
-		this.silent = silent;
-	}
-
-	public Uri getRingToneUrl() {
-		return TextUtils.isEmpty(ringToneUrl) ? RingtoneManager
-				.getDefaultUri(RingtoneManager.TYPE_ALARM) : Uri
-				.parse(ringToneUrl);
-	}
-
-	public void setRingToneUrl(String ringToneUrl) {
-		this.ringToneUrl = ringToneUrl;
 	}
 }
