@@ -10,7 +10,10 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +26,7 @@ import android.widget.TimePicker;
 
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
+import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
 public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener {
@@ -32,6 +36,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
     private ImageButton mFinishButton;
     private AlarmModel mAlarmModel;
     private final static int REPEAT_DIALOG = 1;
+    private ContentObserver mObserver;
     boolean[] checked = new boolean[] { false, false, false, false, false, false, false };
 
     @Override
@@ -52,6 +57,16 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         }
         mList = (ListView) findViewById(android.R.id.list);
         updateListView();
+        
+        getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mObserver = new ContentObserver(new Handler()) {
+
+			@Override
+			public void onChange(boolean selfChange) {
+				super.onChange(selfChange);
+				((PowerOnOffAdapter)mList.getAdapter()).notifyDataSetChanged();
+			}
+		
+        });
     }
 
     private void updateListView() {
@@ -140,7 +155,13 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
 	public void onResume() {
 		super.onResume();
     }
-
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	getContentResolver().unregisterContentObserver(mObserver);
+    }
+    
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         mAlarmModel.setTime(this, hourOfDay, minute);

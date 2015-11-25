@@ -5,7 +5,10 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,11 +25,21 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
     private static final String TAG = "SchedulePowerOnOffActivity";
     private ListView mList;
     private List<AlarmModel> mAlarmModel;
+    private ContentObserver mObserver; // watch 24 hour format
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.power_on_off_activity_layout);
         mList = (ListView) findViewById(android.R.id.list);
+        getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mObserver = new ContentObserver(new Handler()) {
+
+			@Override
+			public void onChange(boolean selfChange) {
+				super.onChange(selfChange);
+				((PowerOnOffAdapter)mList.getAdapter()).notifyDataSetChanged();
+			}
+		
+        });
 
     }
 
@@ -49,6 +62,7 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getContentResolver().unregisterContentObserver(mObserver);
     }
 
     @Override

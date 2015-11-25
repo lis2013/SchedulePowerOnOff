@@ -6,7 +6,6 @@ import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint.Join;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.borqs.schedulepoweronoff.R;
-import com.borqs.schedulepoweronoff.TimeSetActivity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 
 public class PowerOnOffAdapter extends BaseAdapter {
