@@ -68,10 +68,10 @@
         android:layout_width="wrap_content"
         android:layout_height="76dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="50dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="15dp"
-        android:layout_toRightOf="@+id/left_part"
+        android:layout_alignParentRight="true"
         android:focusable="false" />
-    
+
 
 </RelativeLayout>

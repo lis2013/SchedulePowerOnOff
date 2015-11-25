@@ -19,7 +19,6 @@ import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
 
 public class SchedulePowerOnOffActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "SchedulePowerOnOffActivity";
-    static final boolean DEBUG = true;
     private ListView mList;
     private List<AlarmModel> mAlarmModel;
 
@@ -27,7 +26,7 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         super.onCreate(icicle);
         setContentView(R.layout.power_on_off_activity_layout);
         mList = (ListView) findViewById(android.R.id.list);
-      
+
     }
 
     @Override
@@ -41,9 +40,9 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         AlarmPersistence alarmPersistence = AlarmPersistenceImpl.getInstance(this);
         mAlarmModel = alarmPersistence.getAlarms();
         if (mList != null) {
-        	mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
-        	mList.setVerticalScrollBarEnabled(true);
-        	mList.setOnItemClickListener(this);
+            mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
+            mList.setVerticalScrollBarEnabled(true);
+            mList.setOnItemClickListener(this);
         }
     }
     @Override
@@ -52,7 +51,7 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
     }
 
     @Override
-    public void onItemClick(AdapterView parent, View v, int pos, long id) {
+    public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
         Log.d(TAG, "onItemClick, id is " + id);
         AlarmModel alarmModel = mAlarmModel.get(pos);
         Intent intent = new Intent();

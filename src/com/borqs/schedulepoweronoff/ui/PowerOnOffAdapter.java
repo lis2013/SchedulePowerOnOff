@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
@@ -87,14 +86,13 @@ public class PowerOnOffAdapter extends BaseAdapter{
                     boolean checked = ((Switch) v).isChecked();
                     alarmModel.enable(mContext, checked);
                     if (checked) {
-                    	AlarmUtils.toastAlarmPeriod(mContext, alarmModel);
+                        AlarmUtils.toastAlarmPeriod(mContext, alarmModel);
                     }
                 }
             });
         }
         return convertView;
     }
-	
 
     class ViewHolder{
         public TextView timeFormat;
