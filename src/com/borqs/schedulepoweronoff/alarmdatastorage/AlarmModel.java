@@ -107,9 +107,16 @@ public class AlarmModel {
 	 * @return
 	 */
 	private boolean isWeekDaySet(int weekDay) {
-
 		return (mEntity.getWeekDays() & (1 << weekDay)) > 0;
 	}
+
+    public boolean[] getWeekDayStatus() {
+        boolean[] status = new boolean[WEEK_DAY_COUNT];
+        for (int i = 0; i < WEEK_DAY_COUNT; i++) {
+            status[i] = isWeekDaySet(i);
+        }
+        return status;
+    }
 
 	public void setWeekDays(int weekDay, boolean clear) {
 		int weekDays = mEntity.getWeekDays();

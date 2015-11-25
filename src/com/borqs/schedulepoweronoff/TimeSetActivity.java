@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -35,7 +36,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
     private ImageButton mResetButton;
     private ImageButton mFinishButton;
     private AlarmModel mAlarmModel;
-    private final static int REPEAT_DIALOG = 1;
+    private final static int REPEAT_DIALOG = 0;
     private ContentObserver mObserver;
     boolean[] checked = new boolean[] { false, false, false, false, false, false, false };
 
@@ -132,7 +133,8 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         Dialog dialog = null;
         switch (id) {
             case REPEAT_DIALOG:
-                Builder builder = new android.app.AlertDialog.Builder(this);
+                checked = mAlarmModel.getWeekDayStatus();
+                Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getResources().getString(R.string.repeat));
                 builder.setMultiChoiceItems(R.array.week_day, checked,
                         new DialogInterface.OnMultiChoiceClickListener() {
@@ -142,7 +144,12 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
                         });
                 builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        for (int i=0; i< checked.length; i++) {
+                            mAlarmModel.setWeekDays(i, !checked[i]);
+                        }
+                        updateListView();
                         dialog.dismiss();
+
                     }
                 });
                 builder.setNegativeButton(getResources().getString(R.string.cancel),
