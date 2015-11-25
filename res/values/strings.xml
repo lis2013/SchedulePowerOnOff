@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  
+
     <string name="every_day">Every day</string>
     <string name="shutdown_dialog_title">Power Off</string>
     <string name="shutdown_dialog_message">Shut down after <xliff:g id="time">%1$d</xliff:g> seconds.</string>
-
     <string name="power_on_second_title">"Power on Time"</string>
     <string name="power_off_second_title">"Power off Time"</string>
+    <string name="set_power_on">Set Power On</string>
+    <string name="set_power_off">Set Power Off</string>
+    <string name="reset">"Reset"</string>
+    <string name="finish">"Finish"</string>
+    <string name="time_text">"Time"</string>
+    <string name="repeat">"Repeat"</string>
+    <string name="ok">"OK"</string>
+    <string name="cancel">"Cancel"</string>
+    <string-array name="week_day">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 
-	<string-array name="week_day">
-	    <item>Monday</item>
-	    <item>Tuesday</item>
-	    <item>Wednesday</item>
-	    <item>Thursday</item>
-	    <item>Friday</item>
-	    <item>Saturday</item>
-	    <item>Sunday</item>
-	</string-array>
 </resources>

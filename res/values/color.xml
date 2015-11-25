@@ -1,0 +1,6 @@
+<resources>
+    <color name="transparent">#00000000</color>
+    <color name="transparent_white">#66ffffff</color>
+    <color name="main_button_normal">#606060</color>
+    <color name="main_button_selected">#909090</color>
+</resources>

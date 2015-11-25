@@ -15,11 +15,17 @@
 --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="schedule_power_on_off_title">定时开关机</string>
     <string name="schedule_power_on_off_set">设置定时开关机</string>
-
+    <string name="set_power_on">设置定时开机</string>
+    <string name="set_power_off">设置定时关机</string>
+    <string name="reset">"重置"</string>
+    <string name="finish">"完成"</string>
+    <string name="time_text">"时间"</string>
+    <string name="repeat">"重复"</string>
     <string name="power_on_second_title">"开机时间"</string>
     <string name="power_off_second_title">"关机时间"</string>
     <string name="time_format">"上午"</string>
-  
+    <string name="ok">"确定"</string>
+    <string name="cancel">"取消"</string>
     <string name="every_day">"每天"</string>
 
 

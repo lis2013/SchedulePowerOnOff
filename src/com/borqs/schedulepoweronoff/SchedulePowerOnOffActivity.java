@@ -21,22 +21,19 @@ import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
 public class SchedulePowerOnOffActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "SchedulePowerOnOffActivity";
     static final boolean DEBUG = true;
-    private LayoutInflater mLayoutInflater;
     private ListView mList;
+    private List<AlarmModel> mAlarmModel;
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        mLayoutInflater = LayoutInflater.from(this);
-        View v = mLayoutInflater.inflate(R.layout.power_on_off_activity, null);
+        setContentView(R.layout.power_on_off_activity_layout);
+        mList = (ListView) findViewById(android.R.id.list);
         AlarmModelTest t = new AlarmModelTest();
         t.run();
-        setContentView(v);
-        mList = (ListView) v.findViewById(android.R.id.list);
         AlarmPersistence alarmPersistence = AlarmPersistenceImpl.getInstance(this);
-        List<AlarmModel> alarmModel = alarmPersistence.getAlarms();
-        Log.d("lihongxia", "lihongxia--alarmModel.size==" + alarmModel.size());
+        mAlarmModel = alarmPersistence.getAlarms();
         if (mList != null) {
-        	mList.setAdapter(new PowerOnOffAdapter(this, alarmModel));
+        	mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
         	mList.setVerticalScrollBarEnabled(true);
         	mList.setOnItemClickListener(this);
         }
@@ -47,6 +44,10 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -54,10 +55,13 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
     @Override
     public void onItemClick(AdapterView parent, View v, int pos, long id) {
         Log.d(TAG, "onItemClick, id is " + id);
+        AlarmModel alarmModel = mAlarmModel.get(pos);
         Intent intent = new Intent();
         intent.setClass(this, com.borqs.schedulepoweronoff.TimeSetActivity.class);
         final Bundle bundle = new Bundle();
         bundle.putInt(AlarmEntity.CLOCK_TYPE, (int) id);
+        bundle.putString(AlarmEntity.SET_TIME, alarmModel.getTime());
+        bundle.putString(AlarmEntity.REPEAT_INFO, alarmModel.getRepeatedStr(this));
         intent.putExtras(bundle);
         startActivity(intent);
     }

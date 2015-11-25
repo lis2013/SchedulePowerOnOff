@@ -7,8 +7,9 @@ import android.text.TextUtils;
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmEntity {
-	public final static String CLOCK_TYPE = "alarm_type";
-
+    public final static String CLOCK_TYPE = "alarm_type";
+    public final static String SET_TIME = "current_time";
+    public final static String REPEAT_INFO = "repeat_info";  
 	public final static int POWEROFF_CLOCK = 0;
 	public final static int POWERON_CLOCK = 1;
 	private int hour;
