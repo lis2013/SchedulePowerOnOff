@@ -32,14 +32,15 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         AlarmPersistence alarmPersistence = AlarmPersistenceImpl.getInstance(this);
         mAlarmModel = alarmPersistence.getAlarms();
         if (mList != null) {
-        	mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
-        	mList.setVerticalScrollBarEnabled(true);
-        	mList.setOnItemClickListener(this);
+            mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
+            mList.setVerticalScrollBarEnabled(true);
+            mList.setOnItemClickListener(this);
         }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
