@@ -10,7 +10,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.WindowManager;
 
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 import com.borqs.schedulepoweronoff.utils.BaseConstants;
 
 @SuppressLint("NewApi")
@@ -47,6 +49,7 @@ public class ShutdownActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mCurrentCountDownTime = TEN_SECONDS
                 * BaseConstants.THOUSAND_MILLISECONDS;
         if (savedInstanceState != null) {
@@ -55,12 +58,20 @@ public class ShutdownActivity extends Activity {
         }
         showDialog();
         timer.start();
+        AlarmUtils.acquireWakeLock(this);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putLong(KEY_COUNT_DOWN_TIME, mCurrentCountDownTime);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        AlarmUtils.releaseWakeLock();
+        super.onDestroy();
     }
 
     private void showDialog() {
