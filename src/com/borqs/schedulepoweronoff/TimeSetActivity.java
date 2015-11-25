@@ -6,19 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
@@ -26,15 +25,14 @@ import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
-public class TimeSetActivity extends Activity implements
-		TimePickerDialog.OnTimeSetListener, OnClickListener {
+public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener {
 	private ListView mList;
 	private int mTimeType;
 	private ImageButton mResetButton;
 	private ImageButton mFinishButton;
-	private View mPopLayout;
-	private PopupWindow mPopWindow;
 	private AlarmModel mAlarmModel;
+    private final static int REPEAT_DIALOG = 1;
+    boolean[] checked = new boolean[] { false, false, false, false, false, false, false };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +73,7 @@ public class TimeSetActivity extends Activity implements
 							.show();
 					break;
 				case 1:
-					showRepeatPopupWindow();
+					showDialog(REPEAT_DIALOG);
 					break;
 				}
 			}
@@ -104,25 +102,41 @@ public class TimeSetActivity extends Activity implements
 		return simpleAdapter;
 	}
 
-	private void showRepeatPopupWindow() {
-		if (mPopLayout == null) {
-			mPopLayout = getLayoutInflater().inflate(R.layout.set_repeat, null);
-		}
-	}
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog = null;
+        switch (id) {
+            case REPEAT_DIALOG:
+                Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle(getResources().getString(R.string.repeat));
+                builder.setMultiChoiceItems(R.array.week_day, checked,
+                        new DialogInterface.OnMultiChoiceClickListener() {
+                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                checked[which] = isChecked;
+                            }
+                        });
+                builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton(getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+
+                        });
+                dialog = builder.create();
+                break;
+        }
+        return dialog;
+    }
 
 	@Override
 	public void onResume() {
 		super.onResume();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
