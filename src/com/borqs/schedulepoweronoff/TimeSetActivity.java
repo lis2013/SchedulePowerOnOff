@@ -39,7 +39,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_set_layout);
         mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras()
-                .getString(AlarmModel.ENTITY));
+				.getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
 
         mResetButton = (ImageButton) findViewById(R.id.reset);
         mFinishButton = (ImageButton) findViewById(R.id.finish);

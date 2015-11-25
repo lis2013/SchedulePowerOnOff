@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.borqs.schedulepoweronoff.OffOnScheduleMocker;
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistenceImpl;
 
 public class AlarmUtils {
 	private static final String TAG = "AlarmUtils";
@@ -41,9 +42,9 @@ public class AlarmUtils {
 			return;
 		}
 		String alarmJson = model.entityString();
-		//register(context, systemAlarmType, alarmJson, rtcTime, action);
+		register(context, systemAlarmType, alarmJson, rtcTime, action);
 		//test code, need to repalce product code after integrate module.
-		OffOnScheduleMocker.mockAlarm(context, systemAlarmType,  alarmJson, rtcTime, action);
+		//OffOnScheduleMocker.mockAlarm(context, systemAlarmType,  alarmJson, rtcTime, action);
 		Log.d(TAG, "Register alarm event, alarm event(" + alarmJson + ")");
 	}
 	
@@ -74,7 +75,9 @@ public class AlarmUtils {
 		} else {
 			// update the alarm event data, make the event be disabled and save
 			// it
-			model.enable(ctx, false);
+			model.getEntity().setEnable(false);
+			AlarmPersistenceImpl.getInstance(ctx).putAlarm(model);
+			
 		}
 	}
 

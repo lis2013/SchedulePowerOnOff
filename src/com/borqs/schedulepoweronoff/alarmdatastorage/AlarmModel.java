@@ -10,7 +10,6 @@ import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
-	public static final String ENTITY = "entity";
 	private static final String CONCAT_REPEATED_SPLITOR = " ";
 	private static final String NO_REPEATED_SHOWER = "";
 	private static final int WEEK_DAY_COUNT = 7;

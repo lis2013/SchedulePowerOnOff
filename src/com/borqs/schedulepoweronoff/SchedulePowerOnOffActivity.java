@@ -16,6 +16,7 @@ import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistence;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistenceImpl;
 import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
 public class SchedulePowerOnOffActivity extends Activity implements OnItemClickListener {
     private static final String TAG = "SchedulePowerOnOffActivity";
@@ -56,7 +57,7 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         AlarmModel alarmModel = mAlarmModel.get(pos);
         Intent intent = new Intent();
         intent.setClass(this, com.borqs.schedulepoweronoff.TimeSetActivity.class);
-        intent.putExtra(AlarmModel.ENTITY, alarmModel.entityString());
+        intent.putExtra(AlarmUtils.EXTRA_ALARM_DATA_NAME, alarmModel.entityString());
         startActivity(intent);
     }
 }
