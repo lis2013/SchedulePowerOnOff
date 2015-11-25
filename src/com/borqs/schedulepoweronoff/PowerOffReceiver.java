@@ -23,11 +23,8 @@ public class PowerOffReceiver extends BroadcastReceiver {
 
         AlarmModel model = AlarmUtils.decodeAlarmData(intent);
         AlarmEntity entity = model.getEntity();
-        if (model.isRepeated()) {
-            // update the alarm event, switch to next trigger time, register it to AlarmManager
-        } else {
-            // update the alarm event data, make the event be disabled
-        }
+        AlarmUtils.switchToNextAlarm(context, model);
+
         // stale time check
         long now = System.currentTimeMillis();
         if (entity.getTime() < now - BaseConstants.STALE_OFFSET_TIME_SECONDS
