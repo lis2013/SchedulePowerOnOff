@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class PowerOnOffAdapter extends BaseAdapter{
 	private LayoutInflater mInflater;
@@ -48,7 +49,7 @@ public class PowerOnOffAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-		AlarmModel alarmModel = mAlarmModelList.get(position);
+		final AlarmModel alarmModel = mAlarmModelList.get(position);
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.power_on_off_time_list_item,parent, false);
             holder = new ViewHolder();
@@ -86,16 +87,30 @@ public class PowerOnOffAdapter extends BaseAdapter{
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
+					alarmModel.enable(mContext, isChecked);
                     if (isChecked) {
-                        // 1.set next power on/off time
-                        //2. popup toast
+                    	Toast t = Toast.makeText(mContext, formartAlarmRtcTimePeriod(alarmModel), Toast.LENGTH_SHORT);
+                    	t.show();
                     }
 				}
              });
 		}
 		return convertView;
 	}
-
+	
+	private String formartAlarmRtcTimePeriod(AlarmModel model){
+		long period = model.getRTCTime() - System.currentTimeMillis();
+		long hours  = period/(1000 * 60 * 60);
+		long minutes = period/(1000 * 60) % 60;
+		long day = hours / 24;
+		hours = hours % 24;
+		if(model.isPowerOn()){
+			return mContext.getResources().getString(R.string.time_power_on, day, hours, minutes);
+		}else{
+			return mContext.getResources().getString(R.string.time_power_off, day, hours, minutes);
+		}
+	}
+	
 	class ViewHolder{
         public TextView timeFormat;
         public TextView typeTitle;

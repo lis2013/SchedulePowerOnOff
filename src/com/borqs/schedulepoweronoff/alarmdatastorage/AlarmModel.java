@@ -1,6 +1,7 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -43,7 +44,11 @@ public class AlarmModel {
 	public String getTime() {
 		return mEntity.getHour() + ":" + mEntity.getMinute() + "";
 	}
-
+	
+	public long getRTCTime(){
+		return mEntity.getTime();
+	}
+	
 	public boolean isEnabled() {
 		return mEntity.isEnable();
 	}
@@ -89,10 +94,23 @@ public class AlarmModel {
 	}
 
 	public boolean isExpired() {
-		return !isRepeated() && isBeforeNow();
+		return !isRepeated() && isBeforeNowRTCTime();
 	}
-
-	private boolean isBeforeNow() {
+	
+	private boolean isBeforeNowRTCTime(){
+		if(mEntity.getTime()  > 0){
+			//rtc is  calcuated before
+			Date now = new Date(System.currentTimeMillis());
+			Date rtcTime = new Date(mEntity.getTime());
+			return rtcTime.before(now);
+		}else{
+			//never calculate rtc
+			return false;
+		}
+		
+	}
+	
+	private boolean isBeforeNowHourMinutes() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -111,7 +129,7 @@ public class AlarmModel {
 	}
 
 	public void calcRTCTime() {
-		if (!isExpired() && mEntity.isEnable()) {
+		if ( mEntity.isEnable() &&  !isExpired()) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			calendar.set(Calendar.HOUR_OF_DAY, mEntity.getHour());
@@ -119,9 +137,12 @@ public class AlarmModel {
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
 
-			if (!isRepeated()) {
+			if (!isRepeated()  && isBeforeNowHourMinutes()) {
 				// not repeat, only to next day
 				calendar.add(Calendar.DAY_OF_YEAR, 1);
+				mEntity.setTime(calendar.getTimeInMillis());
+				return;
+			}else if(!isRepeated()){
 				mEntity.setTime(calendar.getTimeInMillis());
 				return;
 			}
@@ -138,7 +159,7 @@ public class AlarmModel {
 				}
 			}
 
-			if (isWeekDaySet(todayOfWeekDays) && isBeforeNow()) {
+			if (isWeekDaySet(todayOfWeekDays) && isBeforeNowHourMinutes()) {
 				calendar.add(Calendar.DAY_OF_YEAR, 1);
 			}
 

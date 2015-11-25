@@ -32,7 +32,7 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 		if (getAlarms().isEmpty()) {
 			AlarmEntity onAlarm = new AlarmEntity();
 			onAlarm.setEnable(false);
-			onAlarm.setHour(7);
+			onAlarm.setHour(8);
 			onAlarm.setMinute(30);
 			onAlarm.setWeekDays(127);// 1111111
 			onAlarm.setType(AlarmEntity.POWERON_CLOCK);

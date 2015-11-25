@@ -1,5 +1,7 @@
 package com.borqs.schedulepoweronoff;
 
+import android.util.Log;
+
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 
@@ -9,6 +11,21 @@ public class AlarmModelTest {
 		AlarmModel am = null;
 		AlarmEntity ae = null;
 		long ret = 0;
+		//test expired
+		ae = new AlarmEntity();
+		ae.setHour(12);
+		ae.setMinute(7);
+		ae.setWeekDays(0);
+		ae.setEnable(true);
+		am = new AlarmModel(ae);
+		am.getEntity().setTime(1448424420000L);
+		//am.calcRTCTime();
+		boolean exipred = am.isExpired();
+		if(exipred == true){
+			Log.e("test", "isExpired success");
+		}else{
+			Log.e("test", "isExpired failure");
+		}
 		ae = new AlarmEntity();
 		ae.setHour(3);
 		ae.setMinute(30);
