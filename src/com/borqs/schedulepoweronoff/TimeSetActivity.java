@@ -141,6 +141,7 @@ public class TimeSetActivity extends Activity implements
 		case R.id.finish:
 			mAlarmModel.enable(this, mAlarmModel.isEnabled());
 			AlarmUtils.toastAlarmPeriod(this, mAlarmModel);
+			finish();
 			break;
 		}
 

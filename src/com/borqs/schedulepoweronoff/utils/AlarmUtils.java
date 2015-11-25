@@ -7,12 +7,13 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.borqs.schedulepoweronoff.OffOnScheduleMocker;
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 
 public class AlarmUtils {
 	private static final String TAG = "AlarmUtils";
-	private static final String EXTRA_ALARM_DATA_NAME = "alarm_data";
+	public static final String EXTRA_ALARM_DATA_NAME = "alarm_data";
 
 	public static void registerAlarmEvent(Context context, AlarmModel model) {
 		if (!model.isEnabled()) {
@@ -29,8 +30,6 @@ public class AlarmUtils {
 
 		String action = null;
 		int systemAlarmType = AlarmManager.RTC_WAKEUP;
-		AlarmManager manager = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
 		if (model.isPowerOff()) {
 			action = BaseConstants.ACTION_POWER_OFF;
 			systemAlarmType = AlarmManager.RTC_WAKEUP;
@@ -41,15 +40,23 @@ public class AlarmUtils {
 			Log.e(TAG, "Error Alarm type");
 			return;
 		}
+		String alarmJson = model.entityString();
+		//register(context, systemAlarmType, alarmJson, rtcTime, action);
+		//test code, need to repalce product code after integrate module.
+		OffOnScheduleMocker.mockAlarm(context, systemAlarmType,  alarmJson, rtcTime, action);
+		Log.d(TAG, "Register alarm event, alarm event(" + alarmJson + ")");
+	}
+	
+	private static void register(Context context,int systemAlarmType,  String alarmJson, long rtc, String action){
+		AlarmManager manager = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
 		Intent i = new Intent(action);
-		String alarmJson = model.getEntity().toString();
 		i.putExtra(EXTRA_ALARM_DATA_NAME, alarmJson);
 		PendingIntent pi = PendingIntent.getBroadcast(context, 0, i,
 				PendingIntent.FLAG_CANCEL_CURRENT);
-		manager.set(systemAlarmType, rtcTime, pi);
-		Log.d(TAG, "Register alarm event, alarm event(" + alarmJson + ")");
+		manager.set(systemAlarmType, rtc, pi);
 	}
-
+	
 	/**
 	 * fetch data from Intent extra data, then decode to AlarmModel object
 	 */

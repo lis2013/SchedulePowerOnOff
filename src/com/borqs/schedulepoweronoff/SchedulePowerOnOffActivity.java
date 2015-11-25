@@ -27,15 +27,7 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
         super.onCreate(icicle);
         setContentView(R.layout.power_on_off_activity_layout);
         mList = (ListView) findViewById(android.R.id.list);
-        AlarmModelTest t = new AlarmModelTest();
-        t.run();
-        AlarmPersistence alarmPersistence = AlarmPersistenceImpl.getInstance(this);
-        mAlarmModel = alarmPersistence.getAlarms();
-        if (mList != null) {
-            mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
-            mList.setVerticalScrollBarEnabled(true);
-            mList.setOnItemClickListener(this);
-        }
+      
     }
 
     @Override
@@ -46,6 +38,13 @@ public class SchedulePowerOnOffActivity extends Activity implements OnItemClickL
     @Override
     public void onResume() {
         super.onResume();
+        AlarmPersistence alarmPersistence = AlarmPersistenceImpl.getInstance(this);
+        mAlarmModel = alarmPersistence.getAlarms();
+        if (mList != null) {
+        	mList.setAdapter(new PowerOnOffAdapter(this, mAlarmModel));
+        	mList.setVerticalScrollBarEnabled(true);
+        	mList.setOnItemClickListener(this);
+        }
     }
     @Override
     public void onDestroy() {
