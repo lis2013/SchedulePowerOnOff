@@ -63,7 +63,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
 			@Override
 			public void onChange(boolean selfChange) {
 				super.onChange(selfChange);
-				((PowerOnOffAdapter)mList.getAdapter()).notifyDataSetChanged();
+				mList.setAdapter(getListAdapter());
 			}
 		
         });
@@ -92,14 +92,22 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
             }
         });
     }
-
+    
+    private String getAmPmStr(){
+		if(DateFormat.is24HourFormat(this)){
+    		return "";
+    	}else{
+    		return mAlarmModel.isAm() ? getString(R.string.time_format_morning)
+					: getString(R.string.time_format_afternoon);
+    	}
+    }
+    
     private SimpleAdapter getListAdapter() {
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
 		String[] info = {
 				mAlarmModel.getTime(this)
-						+ (mAlarmModel.isAm() ? getString(R.string.time_format_morning)
-								: getString(R.string.time_format_afternoon)),
+						+ getAmPmStr(),
 				mAlarmModel.getRepeatedStr(this) };
         int[] imageids = { R.drawable.next,
                 R.drawable.next };
