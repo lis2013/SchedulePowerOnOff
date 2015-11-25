@@ -7,11 +7,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistence;

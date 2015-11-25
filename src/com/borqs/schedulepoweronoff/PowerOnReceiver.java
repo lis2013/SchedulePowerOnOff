@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmUtils;
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 public class PowerOnReceiver extends BroadcastReceiver {
 	private static final String TAG = "PowerOnReceiver";
 

@@ -1,11 +1,12 @@
-package com.borqs.schedulepoweronoff.alarmdatastorage;
-
-import com.borqs.schedulepoweronoff.utils.BaseConstants;
+package com.borqs.schedulepoweronoff.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 
 public class AlarmUtils {
     private static final String EXTRA_ALARM_DATA_NAME = "alarm_data";

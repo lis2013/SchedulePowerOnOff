@@ -5,13 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
-
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +19,8 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
+
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 
 public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener{
     private ListView mList;

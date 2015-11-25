@@ -1,15 +1,14 @@
 package com.borqs.schedulepoweronoff;
 
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
-import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmUtils;
-import com.borqs.schedulepoweronoff.utils.BaseConstants;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
 import android.util.Log;
+
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
+import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
+import com.borqs.schedulepoweronoff.utils.AlarmUtils;
+import com.borqs.schedulepoweronoff.utils.BaseConstants;
 
 public class PowerOffReceiver extends BroadcastReceiver {
     private static final String TAG = "PowerOffReceiver";
