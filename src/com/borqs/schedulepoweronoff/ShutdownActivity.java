@@ -11,26 +11,30 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.borqs.schedulepoweronoff.utils.BaseConstants;
+
 @SuppressLint("NewApi")
 public class ShutdownActivity extends Activity {
     private static final String TAG = "ShutdownActivity";
     private static final String KEY_TITLE = "title";
     private static final String KEY_COUNT_DOWN_TIME = "count_down_time";
-    private static final int THOUSAND_MILLISECONDS = 1000;
     private static final int TEN_SECONDS = 10;
 
     private AlertDialogFragment mFragment;
     private long mCurrentCountDownTime;
 
     private CountDownTimer timer = new CountDownTimer(TEN_SECONDS
-            * THOUSAND_MILLISECONDS, THOUSAND_MILLISECONDS) {
+            * BaseConstants.THOUSAND_MILLISECONDS,
+            BaseConstants.THOUSAND_MILLISECONDS) {
 
         @Override
         public void onTick(long millisUntilFinished) {
             mCurrentCountDownTime = millisUntilFinished;
-            setMessage(getResources().getString(
-                    R.string.shutdown_dialog_message,
-                    mCurrentCountDownTime / THOUSAND_MILLISECONDS));
+            setMessage(getResources()
+                    .getString(
+                            R.string.shutdown_dialog_message,
+                            mCurrentCountDownTime
+                                    / BaseConstants.THOUSAND_MILLISECONDS));
         }
 
         @Override
@@ -43,7 +47,8 @@ public class ShutdownActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCurrentCountDownTime = TEN_SECONDS * THOUSAND_MILLISECONDS;
+        mCurrentCountDownTime = TEN_SECONDS
+                * BaseConstants.THOUSAND_MILLISECONDS;
         if (savedInstanceState != null) {
             mCurrentCountDownTime = savedInstanceState
                     .getLong(KEY_COUNT_DOWN_TIME);
@@ -96,10 +101,11 @@ public class ShutdownActivity extends Activity {
             return new AlertDialog.Builder(getActivity())
                     .setTitle(titleId)
                     .setMessage(
-                            getResources().getString(
-                                    R.string.shutdown_dialog_message,
-                                    mActivity.mCurrentCountDownTime
-                                            / THOUSAND_MILLISECONDS))
+                            getResources()
+                                    .getString(
+                                            R.string.shutdown_dialog_message,
+                                            mActivity.mCurrentCountDownTime
+                                                    / BaseConstants.THOUSAND_MILLISECONDS))
                     .setPositiveButton(android.R.string.ok,
                             new OnClickListener() {
                                 @Override

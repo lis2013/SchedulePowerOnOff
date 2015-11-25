@@ -47,15 +47,17 @@
 
         <receiver android:name="com.borqs.schedulepoweronoff.PowerOnReceiver" >
             <intent-filter>
+                <action android:name="com.borqs.action.schedule.poweron" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.borqs.schedulepoweronoff.PowerOffReceiver" >
             <intent-filter>
-                <action android:name="com.borqs.action.schedule.poweroff"/>
+                <action android:name="com.borqs.action.schedule.poweroff" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.borqs.schedulepoweronoff.AlarmInitReceiver" >
             <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
