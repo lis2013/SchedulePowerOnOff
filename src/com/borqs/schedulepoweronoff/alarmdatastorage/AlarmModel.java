@@ -57,19 +57,10 @@ public class AlarmModel {
 			if (hour != 12)
 				hour = hour % 12;
 		}
-
 		StringBuilder sb = new StringBuilder();
-		if (hour < 10) {
-			sb.append(0).append(hour);
-		}else{
-			sb.append(hour);
-		}
+		sb.append(hour < 10  ? "0" + hour : hour);
 		sb.append(":");
-		if (minute < 10) {
-			sb.append(0).append(minute);
-		}else{
-			sb.append(minute);
-		}
+		sb.append(minute < 10 ? "0" + minute :  minute);
 		return sb.toString();
 	}
 

@@ -28,8 +28,11 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
-
-    <string name="time_power_on">the power on is set for <xliff:g id="day">%1$s</xliff:g> days <xliff:g id="hour">%2$s</xliff:g> hours <xliff:g id="minutes">%3$s</xliff:g> minutes from now </string>
-    <string name="time_power_off">the power off is set for <xliff:g id="day">%1$s</xliff:g>days <xliff:g id="hour">%2$s</xliff:g>hours <xliff:g id="minutes">%3$s</xliff:g>minutes from now</string>
+    <string name="now">now</string>
+    <string name="days"><xliff:g id="day">%1$s</xliff:g>days</string>
+    <string name="hours"><xliff:g id="hour">%1$s</xliff:g>hours</string>
+    <string name="minutes"><xliff:g id="minutes">%1$s</xliff:g>miniutes</string>
+    <string name="time_power_on">the power on is set for </string>
+    <string name="time_power_off">the power off is set for </string>
 
 </resources>
