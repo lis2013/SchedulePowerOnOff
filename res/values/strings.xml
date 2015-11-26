@@ -28,6 +28,7 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+
     <string name="now">now</string>
     <string name="days"><xliff:g id="day">%1d</xliff:g>days</string>
     <string name="hours"><xliff:g id="hour">%1$d</xliff:g>hours</string>

@@ -26,26 +26,29 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
+import com.borqs.schedulepoweronoff.TimeChangeNotifier.TimeChangedListener;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
-import com.borqs.schedulepoweronoff.ui.BottomMenu;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
-public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener {
+public class TimeSetActivity extends Activity implements
+        TimePickerDialog.OnTimeSetListener, OnClickListener {
     private ListView mList;
     private int mTimeType;
-    private ImageButton mResetButton, mHomebutton,mFinishButton;
+    private ImageButton mResetButton, mHomebutton, mFinishButton;
     private AlarmModel mAlarmModel;
     private final static int REPEAT_DIALOG = 0;
-    private ContentObserver mObserver;
-    boolean[] checked = new boolean[] { false, false, false, false, false, false, false };
+    private TimeChangeNotifier mNotifier;
+    private TimeChangedListener mTimeChangedListener;
+    boolean[] checked = new boolean[] { false, false, false, false, false,
+            false, false };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_set_layout);
         mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras()
-				.getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
+                .getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
 
         mResetButton = (ImageButton) findViewById(R.id.reset_button);
         mFinishButton = (ImageButton) findViewById(R.id.finish_button);
@@ -60,16 +63,27 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         }
         mList = (ListView) findViewById(android.R.id.list);
         updateListView();
-        
-        getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, mObserver = new ContentObserver(new Handler()) {
+        mNotifier= new TimeChangeNotifier();
+        mNotifier.registerTimeChangedListener(this,
+                mTimeChangedListener = new TimeChangedListener() {
 
-			@Override
-			public void onChange(boolean selfChange) {
-				super.onChange(selfChange);
-				mList.setAdapter(getListAdapter());
-			}
-		
-        });
+                    @Override
+                    public void onTimeChanged() {
+                        mList.setAdapter(getListAdapter());
+                    }
+
+                    @Override
+                    public void onTimeZoneChanged() {
+
+                    }
+
+                    @Override
+                    public void onTimeFormatChanged() {
+                        mList.setAdapter(getListAdapter());
+
+                    }
+
+                });
     }
 
     private void updateListView() {
@@ -81,25 +95,26 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
                     int position, long id) {
                 switch (position) {
                 case 0:
-					new TimePickerDialog(TimeSetActivity.this,
-							TimeSetActivity.this, mAlarmModel.getEntity()
-									.getHour(), mAlarmModel.getEntity()
-									.getMinute(), DateFormat
+                    new TimePickerDialog(TimeSetActivity.this,
+                            TimeSetActivity.this, mAlarmModel.getEntity()
+                                    .getHour(), mAlarmModel.getEntity()
+                                    .getMinute(), DateFormat
                                     .is24HourFormat(TimeSetActivity.this))
                             .show();
                     break;
                 case 1:
-					showDialog(REPEAT_DIALOG);
+                    showDialog(REPEAT_DIALOG);
                     break;
                 }
             }
         });
     }
-    
+
     private SimpleAdapter getListAdapter() {
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
-        String[] info = { mAlarmModel.getTime(this), mAlarmModel.getRepeatedStr(this) };
+        String[] info = { mAlarmModel.getTime(this),
+                mAlarmModel.getRepeatedStr(this) };
         int[] imageids = { R.drawable.next, R.drawable.next };
         String[] second_info = { mAlarmModel.getAmPmStr(this), " " };
         List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
@@ -112,9 +127,11 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
             listems.add(listem);
         }
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems, R.layout.time_set_list_item, new String[] {
-                "title", "info", "second_info", "imageid" }, new int[] { R.id.title_text, R.id.info_text,
-                R.id.info_second_text, R.id.show_button });
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems,
+                R.layout.time_set_list_item, new String[] { "title", "info",
+                        "second_info", "imageid" }, new int[] {
+                        R.id.title_text, R.id.info_text, R.id.info_second_text,
+                        R.id.show_button });
         return simpleAdapter;
     }
 
@@ -122,51 +139,54 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
     protected Dialog onCreateDialog(int id) {
         Dialog dialog = null;
         switch (id) {
-            case REPEAT_DIALOG:
-                checked = mAlarmModel.getWeekDayStatus();
-                Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getResources().getString(R.string.repeat));
-                builder.setMultiChoiceItems(R.array.week_day, checked,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                checked[which] = isChecked;
-                            }
-                        });
-                builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        for (int i=0; i< checked.length; i++) {
-                            mAlarmModel.setWeekDays(i, !checked[i]);
+        case REPEAT_DIALOG:
+            checked = mAlarmModel.getWeekDayStatus();
+            Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getResources().getString(R.string.repeat));
+            builder.setMultiChoiceItems(R.array.week_day, checked,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        public void onClick(DialogInterface dialog, int which,
+                                boolean isChecked) {
+                            checked[which] = isChecked;
                         }
-                        updateListView();
-                        dialog.dismiss();
-
-                    }
-                });
-                builder.setNegativeButton(getResources().getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                    });
+            builder.setPositiveButton(getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            for (int i = 0; i < checked.length; i++) {
+                                mAlarmModel.setWeekDays(i, !checked[i]);
                             }
+                            updateListView();
+                            dialog.dismiss();
 
-                        });
-                dialog = builder.create();
-                break;
+                        }
+                    });
+            builder.setNegativeButton(
+                    getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+
+                    });
+            dialog = builder.create();
+            break;
         }
         return dialog;
     }
 
     @Override
-	public void onResume() {
-		super.onResume();
+    public void onResume() {
+        super.onResume();
     }
-    
+
     @Override
     protected void onDestroy() {
-    	super.onDestroy();
-    	getContentResolver().unregisterContentObserver(mObserver);
+        super.onDestroy();
+        mNotifier.unregisterTimeChangedListener(this, mTimeChangedListener);
     }
-    
+
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         mAlarmModel.setTime(this, hourOfDay, minute);
@@ -183,7 +203,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         case R.id.finish_button:
             mAlarmModel.enable(this, mAlarmModel.isEnabled());
             AlarmUtils.toastAlarmPeriod(this, mAlarmModel);
-			finish();
+            finish();
             break;
         case R.id.home_button:
             Intent intent = new Intent(Intent.ACTION_MAIN);

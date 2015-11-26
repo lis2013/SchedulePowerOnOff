@@ -119,15 +119,13 @@ public class AlarmUtils {
         long day = hours / 24;
         hours = hours % 24;
 		if((day | hours | minutes) == 0){
-			return ctx.getResources().getString(R.string.time_power_on,
-					day, hours, minutes);
+			return sb.append(ctx.getString(R.string.now)).toString();
 		}
 		if (day != 0) {
 			sb.append(ctx.getString(R.string.days, day));
 		}
 		if (hours != 0) {
-			return ctx.getResources().getString(R.string.time_power_off,
-					day, hours, minutes);
+			sb.append(ctx.getString(R.string.hours, hours));
 		}
 		if (minutes != 0) {
 			sb.append(ctx.getString(R.string.minutes, minutes));

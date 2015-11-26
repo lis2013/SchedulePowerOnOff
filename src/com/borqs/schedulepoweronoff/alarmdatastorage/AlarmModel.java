@@ -1,6 +1,7 @@
 package com.borqs.schedulepoweronoff.alarmdatastorage;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -11,94 +12,86 @@ import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
-    private static final String CONCAT_REPEATED_SPLITOR = " ";
-    private static final int WEEK_DAY_COUNT = 7;
+	private static final String CONCAT_REPEATED_SPLITOR = " ";
+	private static final int WEEK_DAY_COUNT = 7;
 
-    private AlarmEntity mEntity;
+	private AlarmEntity mEntity;
 
-    public AlarmModel(AlarmEntity e) {
-        mEntity = e;
-    }
+	public AlarmModel(AlarmEntity e) {
+		mEntity = e;
+	}
 
-    public void setAlarmEntity(AlarmEntity e) {
-        mEntity = e;
-    }
+	public void setAlarmEntity(AlarmEntity e) {
+		mEntity = e;
+	}
 
-    public AlarmEntity getEntity() {
-        return mEntity;
-    }
+	public AlarmEntity getEntity() {
+		return mEntity;
+	}
 
-    public void setTime(Context ctx, int hour, int minute) {
-        this.mEntity.setHour(hour);
-        this.mEntity.setMinute(minute);
-        AlarmPersistenceImpl.getInstance(ctx).putAlarm(this);
-    }
+	public void setTime(Context ctx, int hour, int minute) {
+		this.mEntity.setHour(hour);
+		this.mEntity.setMinute(minute);
+		AlarmPersistenceImpl.getInstance(ctx).putAlarm(this);
+	}
 
-    public boolean isRepeated() {
-        return mEntity.getWeekDays() > 0;
-    }
+	public boolean isRepeated() {
+		return mEntity.getWeekDays() > 0;
+	}
 
-    public boolean isEveryDay() {
-        return (mEntity.getWeekDays() ^ 0x7F) == 0;
-    }
+	public boolean isEveryDay() {
+		return (mEntity.getWeekDays() ^ 0x7F) == 0;
+	}
 
-    public boolean isPowerOn() {
-        return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
-    }
+	public boolean isPowerOn() {
+		return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
+	}
 
-    public boolean isPowerOff() {
-        return mEntity.getType() == AlarmEntity.POWEROFF_CLOCK;
-    }
+	public boolean isPowerOff() {
+		return mEntity.getType() == AlarmEntity.POWEROFF_CLOCK;
+	}
 
-    public String getTime(Context context) {
-        int hour = mEntity.getHour();
-        int minute = mEntity.getMinute();
-        if (!DateFormat.is24HourFormat(context)) {
-            if (hour != 12)
-                hour = hour % 12;
-        }
-        StringBuilder sb = new StringBuilder();
-		sb.append(hour < 10  ? "0" + hour : hour);
-        sb.append(":");
-		sb.append(minute < 10 ? "0" + minute :  minute);
-        return sb.toString();
-    }
+	public String getTime(Context context) {
+		String format = DateFormat.is24HourFormat(context) ? "kk:mm" : "h:mm";
+		CharSequence time = DateFormat.format(format, new Date(mEntity.getTime()));
+		return  (String)time;
+	}
 
-    public long getRTCTime() {
-        return mEntity.getTime();
-    }
+	public long getRTCTime() {
+		return mEntity.getTime();
+	}
 
-    public boolean isEnabled() {
-        return mEntity.isEnable();
-    }
+	public boolean isEnabled() {
+		return mEntity.isEnable();
+	}
 
-    public String getRepeatedStr(Context context) {
-        if (!isRepeated())
-            return context.getString(R.string.never);
+	public String getRepeatedStr(Context context) {
+		if (!isRepeated())
+			return context.getString(R.string.never);
 
-        if (isEveryDay()) {
-            return context.getText(R.string.every_day).toString();
-        }
-        StringBuilder sb = new StringBuilder();
-        String[] dayTStrings = context.getResources().getStringArray(
-                R.array.week_day);
-        for (int i = 0; i < dayTStrings.length; i++) {
-            if (isWeekDaySet(i)) {
-                sb.append(dayTStrings[i]);
-                sb.append(CONCAT_REPEATED_SPLITOR);
-            }
-        }
-        return sb.substring(0, sb.length() - CONCAT_REPEATED_SPLITOR.length());
-    }
+		if (isEveryDay()) {
+			return context.getText(R.string.every_day).toString();
+		}
+		StringBuilder sb = new StringBuilder();
+		String[] dayTStrings = context.getResources().getStringArray(
+				R.array.week_day);
+		for (int i = 0; i < dayTStrings.length; i++) {
+			if (isWeekDaySet(i)) {
+				sb.append(dayTStrings[i]);
+				sb.append(CONCAT_REPEATED_SPLITOR);
+			}
+		}
+		return sb.substring(0, sb.length() - CONCAT_REPEATED_SPLITOR.length());
+	}
 
-    /**
-     *
-     * @param weekDay
-     *            start from 0
-     * @return
-     */
-    private boolean isWeekDaySet(int weekDay) {
-        return (mEntity.getWeekDays() & (1 << weekDay)) > 0;
+	/**
+	 * 
+	 * @param weekDay
+	 *            start from 0
+	 * @return
+	 */
+	private boolean isWeekDaySet(int weekDay) {
+		return (mEntity.getWeekDays() & (1 << weekDay)) > 0;
 	}
 
     public boolean[] getWeekDayStatus() {
@@ -220,9 +213,9 @@ public class AlarmModel {
     }
 
     public boolean isAm() {
-        int hour = mEntity.getHour();
-        int miutes = mEntity.getMinute();
-        return hour > 0 && hour < 12 || hour == 0 && miutes == 0;
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(mEntity.getTime());
+		return c.get(Calendar.AM_PM) == 0;
     }
 
     public String getAmPmStr(Context context) {
