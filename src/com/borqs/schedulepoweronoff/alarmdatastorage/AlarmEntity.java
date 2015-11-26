@@ -5,8 +5,8 @@ import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmEntity {
     public final static String CLOCK_TYPE = "alarm_type";
-	public final static int POWEROFF_CLOCK = 1;
-	public final static int POWERON_CLOCK = 0;
+	public final static int POWEROFF_CLOCK = 0;
+	public final static int POWERON_CLOCK = 1;
 	private int hour;
 	private int minute;
 	private int type; // 0: off clock 1: on clock
