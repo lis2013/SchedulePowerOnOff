@@ -96,37 +96,25 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         });
     }
     
-    private String getAmPmStr(){
-		if(DateFormat.is24HourFormat(this)){
-    		return "";
-    	}else{
-    		return mAlarmModel.isAm() ? getString(R.string.time_format_morning)
-					: getString(R.string.time_format_afternoon);
-    	}
-    }
-    
     private SimpleAdapter getListAdapter() {
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
-		String[] info = {
-				mAlarmModel.getTime(this) + " "
-						+ getAmPmStr(),
-				mAlarmModel.getRepeatedStr(this) };
-        int[] imageids = { R.drawable.next,
-                R.drawable.next };
+        String[] info = { mAlarmModel.getTime(this), mAlarmModel.getRepeatedStr(this) };
+        int[] imageids = { R.drawable.next, R.drawable.next };
+        String[] second_info = { mAlarmModel.getAmPmStr(this), " " };
         List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < title.length; i++) {
             Map<String, Object> listem = new HashMap<String, Object>();
             listem.put("title", title[i]);
             listem.put("info", info[i]);
+            listem.put("second_info", second_info[i]);
             listem.put("imageid", imageids[i]);
             listems.add(listem);
         }
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems,
-                R.layout.time_set_list_item, new String[] { "title", "info",
-                        "imageid" }, new int[] { R.id.title_text,
-						R.id.info_text, R.id.show_button }) ;
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems, R.layout.time_set_list_item, new String[] {
+                "title", "info", "second_info", "imageid" }, new int[] { R.id.title_text, R.id.info_text,
+                R.id.info_second_text, R.id.show_button });
         return simpleAdapter;
     }
 

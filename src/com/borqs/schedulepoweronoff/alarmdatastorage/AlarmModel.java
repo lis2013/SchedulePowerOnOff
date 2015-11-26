@@ -231,4 +231,13 @@ public class AlarmModel {
 		int miutes = mEntity.getMinute();
 		return hour > 0 && hour < 12 || hour == 0 && miutes == 0;
 	}
+
+    public String getAmPmStr(Context context) {
+        if (DateFormat.is24HourFormat(context)) {
+            return "";
+        } else {
+            return isAm() ? context.getString(R.string.time_format_morning) : context
+                    .getString(R.string.time_format_afternoon);
+        }
+    }
 }

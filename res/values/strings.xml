@@ -16,8 +16,8 @@
     <string name="ok">"OK"</string>
     <string name="cancel">"Cancel"</string>
     <string name="home">"Home"</string>
-     <string name="time_format_morning">"morning"</string>
-    <string name="time_format_afternoon">"afternoon"</string>
+     <string name="time_format_morning">"AM"</string>
+    <string name="time_format_afternoon">"PM"</string>
 
     <string-array name="week_day">
         <item>Monday</item>
