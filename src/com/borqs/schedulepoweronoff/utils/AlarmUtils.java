@@ -56,12 +56,18 @@ public class AlarmUtils {
         i.putExtra(EXTRA_ALARM_DATA_NAME, alarmJson);
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        manager.set(systemAlarmType, rtcTime, pi);
-        if(model.isPowerOff()) {
+        if (model.isPowerOff()) {
+            if (powerOffPendingIntentCache != null) {
+                manager.cancel(powerOffPendingIntentCache);
+            }
             powerOffPendingIntentCache = pi;
-        } else if(model.isPowerOn()) {
+        } else if (model.isPowerOn()) {
+            if (powerOnPendingIntentCache != null) {
+                manager.cancel(powerOnPendingIntentCache);
+            }
             powerOnPendingIntentCache = pi;
         }
+        manager.set(systemAlarmType, rtcTime, pi);
         // test code, need to repalce product code after integrate module.
         //OffOnScheduleMocker.mockAlarm(context, systemAlarmType,  alarmJson, rtcTime, action);
         Log.d(TAG, "Register alarm event, alarm event(" + alarmJson + ")");
@@ -106,31 +112,31 @@ public class AlarmUtils {
     }
 
     public static void toastAlarmPeriod(Context ctx, AlarmModel model) {
-		Toast t = Toast.makeText(ctx, formartAlarmRtcTimePeriod(ctx, model), Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(ctx, formartAlarmRtcTimePeriod(ctx, model), Toast.LENGTH_SHORT);
         t.show();
     }
 
-	private static String formartAlarmRtcTimePeriod(Context ctx, AlarmModel model) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(model.isPowerOn() ? ctx.getString(R.string.time_power_on) : ctx.getString(R.string.time_power_off));
+    private static String formartAlarmRtcTimePeriod(Context ctx, AlarmModel model) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(model.isPowerOn() ? ctx.getString(R.string.time_power_on) : ctx.getString(R.string.time_power_off));
         long period = model.getRTCTime() - System.currentTimeMillis();
         long hours = period / (1000 * 60 * 60);
         long minutes = period / (1000 * 60) % 60;
         long day = hours / 24;
         hours = hours % 24;
-		if((day | hours | minutes) == 0){
-			return sb.append(ctx.getString(R.string.now)).toString();
-		}
-		if (day != 0) {
-			sb.append(ctx.getString(R.string.days, day));
-		}
-		if (hours != 0) {
-			sb.append(ctx.getString(R.string.hours, hours));
-		}
-		if (minutes != 0) {
-			sb.append(ctx.getString(R.string.minutes, minutes));
+        if((day | hours | minutes) == 0){
+            return sb.append(ctx.getString(R.string.now)).toString();
         }
-		return sb.toString();
+        if (day != 0) {
+            sb.append(ctx.getString(R.string.days, day));
+        }
+        if (hours != 0) {
+            sb.append(ctx.getString(R.string.hours, hours));
+        }
+        if (minutes != 0) {
+            sb.append(ctx.getString(R.string.minutes, minutes));
+        }
+        return sb.toString();
     }
 
     public static void acquireWakeLock(Context context) {
