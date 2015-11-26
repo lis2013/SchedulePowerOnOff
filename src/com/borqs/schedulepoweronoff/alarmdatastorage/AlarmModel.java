@@ -32,6 +32,7 @@ public class AlarmModel {
 	public void setTime(Context ctx, int hour, int minute) {
 		this.mEntity.setHour(hour);
 		this.mEntity.setMinute(minute);
+		calcRTCTime();
 		AlarmPersistenceImpl.getInstance(ctx).putAlarm(this);
 	}
 
