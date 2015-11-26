@@ -116,9 +116,9 @@ public class AlarmUtils {
         t.show();
     }
 
-    private static String formartAlarmRtcTimePeriod(Context ctx, AlarmModel model) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(model.isPowerOn() ? ctx.getString(R.string.time_power_on) : ctx.getString(R.string.time_power_off));
+	private static String formartAlarmRtcTimePeriod(Context ctx, AlarmModel model) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(model.isPowerOn() ? ctx.getString(R.string.time_power_on) : ctx.getString(R.string.time_power_off));
         long period = model.getRTCTime() - System.currentTimeMillis();
         long hours = period / (1000 * 60 * 60);
         long minutes = period / (1000 * 60) % 60;
@@ -136,6 +136,8 @@ public class AlarmUtils {
         if (minutes != 0) {
             sb.append(ctx.getString(R.string.minutes, minutes));
         }
+		sb.append(ctx.getString(R.string.from_now_on));
+		
         return sb.toString();
     }
 

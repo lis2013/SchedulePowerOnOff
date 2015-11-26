@@ -35,5 +35,6 @@
     <string name="minutes"><xliff:g id="minutes">%1$d</xliff:g>miniutes</string>
     <string name="time_power_on">the power on is set for </string>
     <string name="time_power_off">the power off is set for </string>
+    <string name="from_now_on">from now on </string>
 
 </resources>
