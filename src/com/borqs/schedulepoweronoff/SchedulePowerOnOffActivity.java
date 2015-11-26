@@ -37,12 +37,12 @@ public class SchedulePowerOnOffActivity extends Activity implements
 
                     @Override
                     public void onTimeChanged() {
-                        ((PowerOnOffAdapter) mList.getAdapter())
-                        .notifyDataSetChanged();
+                        reSetTime();
                     }
 
                     @Override
                     public void onTimeZoneChanged() {
+                        reSetTime();
                     }
 
                     @Override
@@ -52,6 +52,14 @@ public class SchedulePowerOnOffActivity extends Activity implements
                     }
 
                 });
+    }
+
+    private void reSetTime() {
+        for (AlarmModel m : mAlarmModel) {
+            m.setTime(SchedulePowerOnOffActivity.this, m.getEntity().getHour(),
+                    m.getEntity().getMinute());
+        }
+        ((PowerOnOffAdapter) mList.getAdapter()).notifyDataSetChanged();
     }
 
     @Override

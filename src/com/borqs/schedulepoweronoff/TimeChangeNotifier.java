@@ -50,6 +50,8 @@ public class TimeChangeNotifier {
             context.getContentResolver().unregisterContentObserver(mObserver);
             context.unregisterReceiver(mReceiver);
         }
+        
+        mTimeChangedListener = listener;
         context.getContentResolver().registerContentObserver(
                 Settings.System.CONTENT_URI, true, mObserver);
 

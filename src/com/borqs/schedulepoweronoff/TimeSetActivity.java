@@ -76,18 +76,21 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
 
                     @Override
                     public void onTimeChanged() {
-                        mList.setAdapter(getListAdapter());
+                        mAlarmModel.setTime(TimeSetActivity.this, mAlarmModel.getEntity().getHour(),
+                                mAlarmModel.getEntity().getMinute());
+                        updateListView();
                     }
 
                     @Override
                     public void onTimeZoneChanged() {
-
+                        mAlarmModel.setTime(TimeSetActivity.this, mAlarmModel.getEntity().getHour(),
+                                mAlarmModel.getEntity().getMinute());
+                        updateListView();
                     }
 
                     @Override
                     public void onTimeFormatChanged() {
-                        mList.setAdapter(getListAdapter());
-
+                        updateListView();
                     }
 
                 });
