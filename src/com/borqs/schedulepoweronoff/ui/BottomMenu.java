@@ -5,9 +5,9 @@ import com.borqs.schedulepoweronoff.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class BottomMenu extends LinearLayout {
+public class BottomMenu extends RelativeLayout {
     public static final String TAG = "BottomMenu";
     public static final int FINISH_MENU = 0;
 

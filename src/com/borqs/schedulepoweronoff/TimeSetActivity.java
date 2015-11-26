@@ -14,13 +14,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.borqs.schedulepoweronoff.TimeChangeNotifier.TimeChangedListener;
@@ -28,14 +31,15 @@ import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
-public class TimeSetActivity extends Activity implements
-        TimePickerDialog.OnTimeSetListener, OnClickListener {
-    private ListView mList;
-    private int mTimeType;
-    private ImageButton mResetButton, mHomebutton, mFinishButton;
-    private AlarmModel mAlarmModel;
-    private final static int REPEAT_DIALOG = 0;
-    private TimeChangeNotifier mNotifier;
+public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener,
+        OnTouchListener {
+    private ListView            mList;
+    private int                 mTimeType;
+    private ImageButton         mResetButton, mHomebutton, mFinishButton;
+    private View                mResetView, mHomeView, mFinishView;
+    private AlarmModel          mAlarmModel;
+    private final static int    REPEAT_DIALOG = 0;
+    private TimeChangeNotifier  mNotifier;
     private TimeChangedListener mTimeChangedListener;
     boolean[] checked = new boolean[] { false, false, false, false, false,
             false, false };
@@ -52,7 +56,13 @@ public class TimeSetActivity extends Activity implements
         mHomebutton = (ImageButton) findViewById(R.id.home_button);
         mHomebutton.setOnClickListener(this);
         mResetButton.setOnClickListener(this);
-        mFinishButton.setOnClickListener(this);
+        mFinishButton.setOnClickListener(this);     
+        mResetView = (View) findViewById(R.id.reset_menu);
+        mFinishView = (View) findViewById(R.id.finish_menu);
+        mHomeView = (View) findViewById(R.id.home_menu);
+        mResetView.setOnTouchListener(this);
+        mFinishView.setOnTouchListener(this);
+        mHomeView.setOnTouchListener(this);
         if (mTimeType == AlarmEntity.POWERON_CLOCK) {
             setTitle(R.string.set_power_on);
         } else {
@@ -194,21 +204,46 @@ public class TimeSetActivity extends Activity implements
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-        case R.id.reset_button:
-            finish();
-            break;
-        case R.id.finish_button:
-            mAlarmModel.enable(this, mAlarmModel.isEnabled());
-            AlarmUtils.toastAlarmPeriod(this, mAlarmModel);
-            finish();
-            break;
-        case R.id.home_button:
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            this.startActivity(intent);
-            break;
+            case R.id.reset_button:
+                finish();
+                break;
+            case R.id.finish_button:
+                enableAlarm();
+                finish();
+                break;
+            case R.id.home_button:
+                launchHome();
+                break;
         }
 
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.reset_menu:
+                finish();
+                break;
+            case R.id.finish_menu:
+                enableAlarm();
+                finish();
+                break;
+            case R.id.home_menu:
+                launchHome();
+                break;
+        }
+        return false;
+    }
+
+    private void launchHome() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        this.startActivity(intent);
+    }
+
+    private void enableAlarm() {
+        mAlarmModel.enable(this, true);
+        AlarmUtils.toastAlarmPeriod(this, mAlarmModel);     
+    }
 }

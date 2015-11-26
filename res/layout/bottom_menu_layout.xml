@@ -48,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/finish"
+            android:paddingLeft="2dp"
             android:textSize="12sp" >
         </TextView>
     </LinearLayout>
@@ -69,7 +70,7 @@
             android:id="@+id/home_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="3dp"
+            android:paddingLeft="3dp"
             android:text="@string/home"
             android:textSize="12sp" >
         </TextView>
