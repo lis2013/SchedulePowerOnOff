@@ -85,7 +85,7 @@ public class PowerOnOffAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		int resId = R.string.power_on_second_title;
-		int color = Color.parseColor("#4cd964");
+		int color = Color.parseColor("#00BFFF");
 		if (!alarmModel.isPowerOn()) {
 			resId = R.string.power_off_second_title;
 			color = Color.parseColor("#da1c37");

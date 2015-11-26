@@ -11,6 +11,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,14 +28,13 @@ import android.widget.TimePicker;
 
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
-import com.borqs.schedulepoweronoff.ui.PowerOnOffAdapter;
+import com.borqs.schedulepoweronoff.ui.BottomMenu;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
 public class TimeSetActivity extends Activity implements TimePickerDialog.OnTimeSetListener, OnClickListener {
     private ListView mList;
     private int mTimeType;
-    private ImageButton mResetButton;
-    private ImageButton mFinishButton;
+    private ImageButton mResetButton, mHomebutton,mFinishButton;
     private AlarmModel mAlarmModel;
     private final static int REPEAT_DIALOG = 0;
     private ContentObserver mObserver;
@@ -47,8 +47,10 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras()
 				.getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
 
-        mResetButton = (ImageButton) findViewById(R.id.reset);
-        mFinishButton = (ImageButton) findViewById(R.id.finish);
+        mResetButton = (ImageButton) findViewById(R.id.reset_button);
+        mFinishButton = (ImageButton) findViewById(R.id.finish_button);
+        mHomebutton = (ImageButton) findViewById(R.id.home_button);
+        mHomebutton.setOnClickListener(this);
         mResetButton.setOnClickListener(this);
         mFinishButton.setOnClickListener(this);
         if (mTimeType == AlarmEntity.POWERON_CLOCK) {
@@ -107,7 +109,7 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
 		String[] info = {
-				mAlarmModel.getTime(this)
+				mAlarmModel.getTime(this) + " "
 						+ getAmPmStr(),
 				mAlarmModel.getRepeatedStr(this) };
         int[] imageids = { R.drawable.next,
@@ -187,13 +189,18 @@ public class TimeSetActivity extends Activity implements TimePickerDialog.OnTime
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-        case R.id.reset:
+        case R.id.reset_button:
             finish();
             break;
-        case R.id.finish:
+        case R.id.finish_button:
             mAlarmModel.enable(this, mAlarmModel.isEnabled());
             AlarmUtils.toastAlarmPeriod(this, mAlarmModel);
 			finish();
+            break;
+        case R.id.home_button:
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            this.startActivity(intent);
             break;
         }
 

@@ -12,27 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
-    
-    <FrameLayout
-        android:id="@+id/footer_view"
+    <com.borqs.schedulepoweronoff.ui.BottomMenu
+        android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="20dp" >
-        <ImageButton
-            android:id="@+id/finish"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/finish_icon"
-            android:layout_gravity="center" 
-            android:background="@drawable/item_bg"/>
-        <ImageButton
-            android:id="@+id/reset"
-            android:layout_gravity="end|center_vertical"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/reset_icon"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/item_bg"/>
-    </FrameLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp">
+    </com.borqs.schedulepoweronoff.ui.BottomMenu>
+
 </LinearLayout>

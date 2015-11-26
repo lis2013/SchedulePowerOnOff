@@ -29,7 +29,7 @@
     <string name="ok">"确定"</string>
     <string name="cancel">"取消"</string>
     <string name="every_day">"每天"</string>
-
+    <string name="home">"主页"</string>
 	<string name="time_power_on">开机时间设置为距离现在 <xliff:g id="day">%1$s</xliff:g>天 <xliff:g id="hour">%2$s</xliff:g> 小时 <xliff:g id="minutes">%3$s</xliff:g>分钟</string>
     <string name="time_power_off">关机时间设置为距离现在 <xliff:g id="day">%1$s</xliff:g>天 <xliff:g id="hour">%2$s</xliff:g>小时 <xliff:g id="minutes">%3$s</xliff:g>分钟 </string>
 	<string-array name="week_day">
