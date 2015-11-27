@@ -37,8 +37,8 @@
     <string name="days"><xliff:g id="day">%1$d</xliff:g>天</string>
     <string name="hours"><xliff:g id="hour">%1$d</xliff:g>小时</string>
     <string name="minutes"><xliff:g id="minutes">%1$d</xliff:g>分钟</string>
-    <string name="time_power_on">定时开机时间设置为<xliff:g id="power_on_time">%1$s</xliff:g>之后启动。</string>
-    <string name="time_power_off">定时关机时间设置为<xliff:g id="power_off_time">%1$s</xliff:g>之后启动。 </string>
+    <string name="time_power_on">定时开机设置为<xliff:g id="power_on_time">%1$s</xliff:g>之后启动。</string>
+    <string name="time_power_off">定时关机设置为<xliff:g id="power_off_time">%1$s</xliff:g>之后启动。 </string>
     <string name="shutdown_dialog_title">关机</string>
     <string name="shutdown_dialog_message">系统将在<xliff:g id="time">%1$d</xliff:g>秒之后关机.</string>
 
