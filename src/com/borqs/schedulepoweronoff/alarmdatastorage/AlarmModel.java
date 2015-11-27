@@ -117,47 +117,24 @@ public class AlarmModel {
         return status;
     }
 
-    public void setWeekDays(int weekDay, boolean clear) {
+    public void setWeekDay(int weekDay, boolean set) {
         int weekDays = mEntity.getWeekDays();
-        if (clear) {
+        if (!set) {
             weekDays &= ~(1 << weekDay);
         } else {
             weekDays |= (1 << weekDay);
         }
         mEntity.setWeekDays(weekDays);
     }
-
-	public void setRepeatDays(int type) {
-		boolean[] weekDayStatus =getWeekDayStatus();
-		int weekDay = 5;
-		switch(type) {
-		case 0:
-			repeatTypeFlag = 1;
-			for (int i=0; i< weekDay; i++) {
-				mEntity.setWeekDays(i);
-				if (!weekDayStatus[i]) {
-					setWeekDays(i, true);
-				}
-			}
-			for (int i=0; i<WEEK_DAY_COUNT-weekDay; i++) {
-				if (weekDayStatus[i+weekDay]) {
-					setWeekDays(i+weekDay, false);
-				}
-			}
-			break;
-		case 1:
-			repeatTypeFlag =2;
-			weekDay = 7;
-			for (int i=0; i<weekDay; i++) {
-				mEntity.setWeekDays(i);
-				setWeekDays(i, true);
-				if (!weekDayStatus[i]) {
-					setWeekDays(i, true);
-				}
-			}
-			break;
-		}
-	}
+    
+    public void setWeekDays(boolean weekdays[]){
+        if(weekdays.length != WEEK_DAY_COUNT){
+            throw new IllegalArgumentException("weekdays length is llegal");
+        }
+        for(int i = 0 ; i < weekdays.length; i++){
+            setWeekDay(i, weekdays[i]);
+        }
+    }
 
     public boolean isExpired() {
         return !isRepeated() && isBeforeNowRTCTime();
