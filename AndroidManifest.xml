@@ -27,7 +27,7 @@
             android:label="@string/schedule_power_on_off_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="com.android.settings.SCHEDULE_POWER_ON_OFF_SETTING" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
