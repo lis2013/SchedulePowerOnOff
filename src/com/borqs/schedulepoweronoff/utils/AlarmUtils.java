@@ -41,10 +41,8 @@ public class AlarmUtils {
         int systemAlarmType = AlarmManager.RTC_WAKEUP;
         if (model.isPowerOff()) {
             action = BaseConstants.ACTION_POWER_OFF;
-            systemAlarmType = AlarmManager.RTC_WAKEUP;
         } else if (model.isPowerOn()) {
             action = BaseConstants.ACTION_POWER_ON;
-            systemAlarmType = AlarmManager.RTC_POWEROFF_WAKEUP;
         } else {
             Log.e(TAG, "Error Alarm type");
             return;

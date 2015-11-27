@@ -40,7 +40,7 @@
     <string name="days"> <xliff:g id="day">%1d</xliff:g>days</string>
     <string name="hours"> <xliff:g id="hour">%1$d</xliff:g>hours</string>
     <string name="minutes"> <xliff:g id="minutes">%1$d</xliff:g>miniutes</string>
-    <string name="time_power_on">Power on time is set for<xliff:g id="power_on_time">%1$s</xliff:g> from now.</string>
-    <string name="time_power_off">Power off time is set for<xliff:g id="power_off_time">%1$s</xliff:g> from now.</string>
+    <string name="time_power_on">Power on is set for<xliff:g id="power_on_time">%1$s</xliff:g> from now.</string>
+    <string name="time_power_off">Power off is set for<xliff:g id="power_off_time">%1$s</xliff:g> from now.</string>
 
 </resources>

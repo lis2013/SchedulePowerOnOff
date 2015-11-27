@@ -5,12 +5,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 import com.borqs.schedulepoweronoff.utils.BaseConstants;
@@ -25,36 +28,46 @@ public class ShutdownActivity extends Activity {
     private AlertDialogFragment mFragment;
     private long mCurrentCountDownTime;
 
-    private CountDownTimer timer = new CountDownTimer(TEN_SECONDS
-            * BaseConstants.THOUSAND_MILLISECONDS,
-            BaseConstants.THOUSAND_MILLISECONDS) {
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            mCurrentCountDownTime = millisUntilFinished;
-            setMessage(getResources()
-                    .getString(
-                            R.string.shutdown_dialog_message,
-                            mCurrentCountDownTime
-                                    / BaseConstants.THOUSAND_MILLISECONDS));
-        }
-
-        @Override
-        public void onFinish() {
-            shutdown();
-            finish();
-        }
-    };
+    private CountDownTimer timer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         mCurrentCountDownTime = TEN_SECONDS
                 * BaseConstants.THOUSAND_MILLISECONDS;
         if (savedInstanceState != null) {
             mCurrentCountDownTime = savedInstanceState
                     .getLong(KEY_COUNT_DOWN_TIME);
         }
+
+        timer = new CountDownTimer(TEN_SECONDS
+                * BaseConstants.THOUSAND_MILLISECONDS,
+                BaseConstants.THOUSAND_MILLISECONDS) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mCurrentCountDownTime = millisUntilFinished;
+                setMessage(getResources()
+                        .getString(
+                                R.string.shutdown_dialog_message,
+                                mCurrentCountDownTime
+                                        / BaseConstants.THOUSAND_MILLISECONDS));
+            }
+
+            @Override
+            public void onFinish() {
+                TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                // cancel the shut down operation when phone in-call
+                if(manager.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
+                    shutdown();
+                }
+                finish();
+            }
+        };
+
         showDialog();
         timer.start();
         AlarmUtils.acquireWakeLock(this);
@@ -89,7 +102,6 @@ public class ShutdownActivity extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-
     }
 
     private static class AlertDialogFragment extends DialogFragment {
