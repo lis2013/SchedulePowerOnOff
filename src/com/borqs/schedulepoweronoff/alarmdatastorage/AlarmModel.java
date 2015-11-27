@@ -6,12 +6,14 @@ import java.util.Date;
 import android.content.Context;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
+    private static final String TAG = AlarmModel.class.getSimpleName();
 	private static final String CONCAT_REPEATED_SPLITOR = " ";
 	private static final int WEEK_DAY_COUNT = 7;
 
@@ -30,11 +32,12 @@ public class AlarmModel {
 		return mEntity;
 	}
 
-	public void setTime(Context ctx, int hour, int minute) {
+	public void setTime(Context ctx, int hour, int minute, boolean enableNow) {
 		this.mEntity.setHour(hour);
 		this.mEntity.setMinute(minute);
 		calcRTCTime();
-		AlarmPersistenceImpl.getInstance(ctx).putAlarm(this);
+		if(enableNow)
+		    enable(ctx, enableNow);
 	}
 
 	public boolean isRepeated() {
@@ -213,6 +216,7 @@ public class AlarmModel {
             calendar.add(Calendar.DAY_OF_WEEK, i);
         }
         mEntity.setTime(calendar.getTimeInMillis());
+        Log.i(TAG,  "type:" + mEntity.getType() + " rtc time:" + mEntity.getTime());
     }
 
     /**

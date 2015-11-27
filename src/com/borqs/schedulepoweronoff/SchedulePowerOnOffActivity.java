@@ -57,7 +57,7 @@ public class SchedulePowerOnOffActivity extends Activity implements
     private void reSetTime() {
         for (AlarmModel m : mAlarmModel) {
             m.setTime(SchedulePowerOnOffActivity.this, m.getEntity().getHour(),
-                    m.getEntity().getMinute());
+                    m.getEntity().getMinute(), true);
         }
         ((PowerOnOffAdapter) mList.getAdapter()).notifyDataSetChanged();
     }

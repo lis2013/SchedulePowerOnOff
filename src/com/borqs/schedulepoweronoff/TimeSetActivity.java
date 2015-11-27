@@ -92,7 +92,7 @@ public class TimeSetActivity extends Activity implements
                     public void onTimeChanged() {
                         mAlarmModel.setTime(TimeSetActivity.this, mAlarmModel
                                 .getEntity().getHour(), mAlarmModel.getEntity()
-                                .getMinute());
+                                .getMinute(), true);
                         updateListView();
                     }
 
@@ -100,7 +100,7 @@ public class TimeSetActivity extends Activity implements
                     public void onTimeZoneChanged() {
                         mAlarmModel.setTime(TimeSetActivity.this, mAlarmModel
                                 .getEntity().getHour(), mAlarmModel.getEntity()
-                                .getMinute());
+                                .getMinute(), true);
                         updateListView();
                     }
 
@@ -250,7 +250,7 @@ public class TimeSetActivity extends Activity implements
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        mAlarmModel.setTime(this, hourOfDay, minute);
+        mAlarmModel.setTime(this, hourOfDay, minute, false);
         updateListView();
     }
 

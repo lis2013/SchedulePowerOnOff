@@ -56,7 +56,7 @@ public class TimeChangeNotifier {
                 Settings.System.CONTENT_URI, true, mObserver);
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_TIME_TICK);
+      //  filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_TIME_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         context.registerReceiver(mReceiver, filter, null, new Handler());
