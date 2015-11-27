@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -83,11 +84,11 @@ public class ShutdownActivity extends Activity {
 
     private void shutdown() {
         Log.i(TAG, "Request shut down the system");
-        // Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
-        // intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // startActivity(intent);
+        Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
+        intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
+        intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
 
     }
 
