@@ -13,7 +13,6 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
-
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
@@ -26,6 +25,7 @@
     <string name="finish">"完成"</string>
     <string name="time_text">"时间"</string>
     <string name="repeat">"重复"</string>
+    <string name="custom_repeat">"自定义重复"</string>
     <string name="power_on_second_title">"开机时间"</string>
     <string name="power_off_second_title">"关机时间"</string>
     <string name="time_format_morning">"上午"</string>
@@ -38,21 +38,25 @@
     <string name="days"><xliff:g id="day">%1$d</xliff:g>天</string>
     <string name="hours"><xliff:g id="hour">%1$d</xliff:g>小时</string>
     <string name="minutes"><xliff:g id="minutes">%1$d</xliff:g>分钟</string>
-
     <string name="time_power_on">开机时间设置为</string>
     <string name="time_power_off">关机时间设置为 </string>
     <string name="from_now_on">距离现在 </string>
-
     <string name="shutdown_dialog_title">关机</string>
     <string name="shutdown_dialog_message">系统将在<xliff:g id="time">%1$d</xliff:g>秒之后关机.</string>
 
     <string-array name="week_day">
-      <item>周一</item>
-      <item>周二</item>
-      <item>周三</item>
-      <item>周四</item>
-      <item>周五</item>
-      <item>周六</item>
-      <item>周日</item>
+        <item>周一</item>
+        <item>周二</item>
+        <item>周三</item>
+        <item>周四</item>
+        <item>周五</item>
+        <item>周六</item>
+        <item>周日</item>
     </string-array>
+    <string-array name="repeat_type">
+        <item>周一到周五</item>
+        <item>每天</item>
+        <item>自定义</item>
+    </string-array>
+
 </resources>

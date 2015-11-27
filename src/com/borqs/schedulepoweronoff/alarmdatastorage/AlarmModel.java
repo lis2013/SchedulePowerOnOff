@@ -16,6 +16,7 @@ public class AlarmModel {
 	private static final int WEEK_DAY_COUNT = 7;
 
 	private AlarmEntity mEntity;
+	private int repeatTypeFlag = 0;
 
 	public AlarmModel(AlarmEntity e) {
 		mEntity = e;
@@ -44,6 +45,10 @@ public class AlarmModel {
 		return (mEntity.getWeekDays() ^ 0x7F) == 0;
 	}
 
+	public boolean isMondayToFriday() {
+		return (mEntity.getWeekDays() ^ 0x1F) == 0;
+	}
+
 	public boolean isPowerOn() {
 		return mEntity.getType() == AlarmEntity.POWERON_CLOCK;
 	}
@@ -67,11 +72,16 @@ public class AlarmModel {
 	}
 
 	public String getRepeatedStr(Context context) {
+		String[] result = new String[] {context.getString(R.string.never),context.getResources().getStringArray(R.array.repeat_type)[0],
+				context.getText(R.string.every_day).toString(),};
 		if (!isRepeated())
-			return context.getString(R.string.never);
+			return result[0];
 
-		if (isEveryDay()) {
-			return context.getText(R.string.every_day).toString();
+		if (repeatTypeFlag == 1) {
+			return result[1];
+		}
+		if (repeatTypeFlag == 2 || isEveryDay()) {
+			return result[2];
 		}
 		StringBuilder sb = new StringBuilder();
 		String[] dayTStrings = context.getResources().getStringArray(
@@ -82,7 +92,11 @@ public class AlarmModel {
 				sb.append(CONCAT_REPEATED_SPLITOR);
 			}
 		}
-		return sb.substring(0, sb.length() - CONCAT_REPEATED_SPLITOR.length());
+		String info = sb.substring(0, sb.length() - CONCAT_REPEATED_SPLITOR.length());
+		if (result.equals("周一 周二 周三 周四 周五")) {
+			return result[1];
+		}
+		return info;
 	}
 
 	/**
@@ -112,6 +126,38 @@ public class AlarmModel {
         }
         mEntity.setWeekDays(weekDays);
     }
+
+	public void setRepeatDays(int type) {
+		boolean[] weekDayStatus =getWeekDayStatus();
+		int weekDay = 5;
+		switch(type) {
+		case 0:
+			repeatTypeFlag = 1;
+			for (int i=0; i< weekDay; i++) {
+				mEntity.setWeekDays(i);
+				if (!weekDayStatus[i]) {
+					setWeekDays(i, true);
+				}
+			}
+			for (int i=0; i<WEEK_DAY_COUNT-weekDay; i++) {
+				if (weekDayStatus[i+weekDay]) {
+					setWeekDays(i+weekDay, false);
+				}
+			}
+			break;
+		case 1:
+			repeatTypeFlag =2;
+			weekDay = 7;
+			for (int i=0; i<weekDay; i++) {
+				mEntity.setWeekDays(i);
+				setWeekDays(i, true);
+				if (!weekDayStatus[i]) {
+					setWeekDays(i, true);
+				}
+			}
+			break;
+		}
+	}
 
     public boolean isExpired() {
         return !isRepeated() && isBeforeNowRTCTime();

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+    <string name="schedule_power_on_off_title">Schedule power on &amp; off</string>
+    <string name="schedule_power_on_off_set">Set schedule power on &amp; off</string>
     <string name="every_day">Every day</string>
     <string name="never">Never</string>
     <string name="shutdown_dialog_title">Power Off</string>
@@ -13,6 +15,7 @@
     <string name="finish">"Finish"</string>
     <string name="time_text">"Time"</string>
     <string name="repeat">"Repeat"</string>
+    <string name="custom_repeat">"Custom repeat"</string>
     <string name="ok">"OK"</string>
     <string name="cancel">"Cancel"</string>
     <string name="home">"Home"</string>
@@ -27,6 +30,11 @@
         <item>Friday</item>
         <item>Saturday</item>
         <item>Sunday</item>
+    </string-array>
+    <string-array name="repeat_type">
+        <item>Monday to Friday</item>
+        <item>Every day</item>
+        <item>Custom</item>
     </string-array>
 
     <string name="now">now</string>
