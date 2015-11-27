@@ -37,12 +37,10 @@
         <item>Custom</item>
     </string-array>
 
-    <string name="now">now</string>
-    <string name="days"><xliff:g id="day">%1d</xliff:g>days</string>
-    <string name="hours"><xliff:g id="hour">%1$d</xliff:g>hours</string>
-    <string name="minutes"><xliff:g id="minutes">%1$d</xliff:g>miniutes</string>
-    <string name="time_power_on">the power on is set for </string>
-    <string name="time_power_off">the power off is set for </string>
-    <string name="from_now_on">from now on </string>
+    <string name="days"> <xliff:g id="day">%1d</xliff:g>days</string>
+    <string name="hours"> <xliff:g id="hour">%1$d</xliff:g>hours</string>
+    <string name="minutes"> <xliff:g id="minutes">%1$d</xliff:g>miniutes</string>
+    <string name="time_power_on">Power on time is set for<xliff:g id="power_on_time">%1$s</xliff:g> from now.</string>
+    <string name="time_power_off">Power off time is set for<xliff:g id="power_off_time">%1$s</xliff:g> from now.</string>
 
 </resources>

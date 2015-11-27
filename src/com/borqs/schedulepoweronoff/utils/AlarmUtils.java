@@ -117,15 +117,14 @@ public class AlarmUtils {
     }
 
     private static String formartAlarmRtcTimePeriod(Context ctx, AlarmModel model) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(model.isPowerOn() ? ctx.getString(R.string.time_power_on) : ctx.getString(R.string.time_power_off));
         long period = model.getRTCTime() - System.currentTimeMillis();
         long hours = period / (1000 * 60 * 60);
         long minutes = period / (1000 * 60) % 60;
         long day = hours / 24;
         hours = hours % 24;
+        StringBuffer sb = new StringBuffer();
         if((day | hours | minutes) == 0){
-            return sb.append(ctx.getString(R.string.now)).toString();
+            sb.append(ctx.getString(R.string.minutes, 0));
         }
         if (day != 0) {
             sb.append(ctx.getString(R.string.days, day));
@@ -136,9 +135,11 @@ public class AlarmUtils {
         if (minutes != 0) {
             sb.append(ctx.getString(R.string.minutes, minutes));
         }
-        sb.append(ctx.getString(R.string.from_now_on));
+        String str = model.isPowerOn() ? ctx.getString(R.string.time_power_on,
+                sb.toString()) : ctx.getString(R.string.time_power_off,
+                sb.toString());
 
-        return sb.toString();
+        return str;
     }
 
     @SuppressWarnings("deprecation")
