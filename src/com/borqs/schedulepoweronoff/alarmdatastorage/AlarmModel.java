@@ -82,6 +82,9 @@ public class AlarmModel {
             return result[0];
         int repeatType = context.getSharedPreferences(PREFERECNE_NAME, Context.MODE_PRIVATE).getInt(
                 AlarmModel.CHOOSE_TYPE_KEY, 0);
+        if (repeatType == 0) {
+            return result[1];
+        }
         if (isEveryDay() && repeatType == 1) {
             return result[2];
         }

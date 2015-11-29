@@ -12,12 +12,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
-    <com.borqs.schedulepoweronoff.ui.BottomMenu
-        android:id="@+id/bottom_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp">
-    </com.borqs.schedulepoweronoff.ui.BottomMenu>
-
+    <include layout="@layout/bottom_menu_layout" />
 </LinearLayout>
