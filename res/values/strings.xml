@@ -23,13 +23,13 @@
     <string name="time_format_afternoon">"PM"</string>
 
     <string-array name="week_day">
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
+        <item>Mon.</item>
+        <item>Tues.</item>
+        <item>Wed.</item>
+        <item>Thur.</item>
+        <item>Fri.</item>
+        <item>Sat.</item>
+        <item>Sun.</item>
     </string-array>
     <string-array name="repeat_type">
         <item>Monday to Friday</item>
