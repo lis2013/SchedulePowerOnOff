@@ -38,7 +38,7 @@ public class AlarmUtils {
         }
 
         String action = null;
-        int systemAlarmType = AlarmManager.RTC_WAKEUP;
+        int systemAlarmType = AlarmManager.RTC_POWEROFF_WAKEUP;
         if (model.isPowerOff()) {
             action = BaseConstants.ACTION_POWER_OFF;
         } else if (model.isPowerOn()) {
