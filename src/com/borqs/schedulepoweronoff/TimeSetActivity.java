@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +37,7 @@ import com.borqs.schedulepoweronoff.utils.AlarmUtils;
 
 public class TimeSetActivity extends Activity implements
         TimePickerDialog.OnTimeSetListener, OnClickListener, OnTouchListener {
-
+    private static final String TAG = TimeSetActivity.class.getSimpleName();
     private static final boolean[] MONDAY_TO_FRIDAY = new boolean[] { true,
             true, true, true, true, false, false };
 
@@ -90,6 +91,7 @@ public class TimeSetActivity extends Activity implements
                     @Override
                     public void onChange(boolean selfChange) {
                         super.onChange(selfChange);
+                        Log.i(TAG, "System time format changed");
                         updateListView();
                     }
 
