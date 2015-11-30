@@ -5,14 +5,16 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.borqs.schedulepoweronoff.TimeChangeNotifier.TimeChangedListener;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistence;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmPersistenceImpl;
@@ -24,42 +26,25 @@ public class SchedulePowerOnOffActivity extends Activity implements
     private static final String TAG = "SchedulePowerOnOffActivity";
     private ListView mList;
     private List<AlarmModel> mAlarmModel;
-    private TimeChangeNotifier mNotifier;
-    private TimeChangedListener mTimeChangedListener;
+    private ContentObserver mObserver;
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.power_on_off_activity_layout);
         mList = (ListView) findViewById(android.R.id.list);
-        mNotifier = new TimeChangeNotifier();
-        mNotifier.registerTimeChangedListener(this,
-                mTimeChangedListener = new TimeChangedListener() {
+
+        getContentResolver().registerContentObserver(
+                Settings.System.CONTENT_URI, true,
+                mObserver = new ContentObserver(new Handler()) {
 
                     @Override
-                    public void onTimeChanged() {
-                        reSetTime();
-                    }
-
-                    @Override
-                    public void onTimeZoneChanged() {
-                        reSetTime();
-                    }
-
-                    @Override
-                    public void onTimeFormatChanged() {
+                    public void onChange(boolean selfChange) {
+                        super.onChange(selfChange);
                         ((PowerOnOffAdapter) mList.getAdapter())
                                 .notifyDataSetChanged();
                     }
 
                 });
-    }
-
-    private void reSetTime() {
-        for (AlarmModel m : mAlarmModel) {
-            m.setTime(SchedulePowerOnOffActivity.this, m.getEntity().getHour(),
-                    m.getEntity().getMinute(), true);
-        }
-        ((PowerOnOffAdapter) mList.getAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -83,7 +68,7 @@ public class SchedulePowerOnOffActivity extends Activity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mNotifier.unregisterTimeChangedListener(this, mTimeChangedListener);
+        getContentResolver().unregisterContentObserver(mObserver);
     }
 
     @Override

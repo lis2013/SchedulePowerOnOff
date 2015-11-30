@@ -14,7 +14,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +30,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TimePicker;
 
-import com.borqs.schedulepoweronoff.TimeChangeNotifier.TimeChangedListener;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmEntity;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
@@ -47,8 +49,7 @@ public class TimeSetActivity extends Activity implements
     private AlarmModel mAlarmModel;
     private final static int CUSTOM_REPEAT_DIALOG = 0;
     private final static int REPEAT_DIALOG = 1;
-    private TimeChangeNotifier mNotifier;
-    private TimeChangedListener mTimeChangedListener;
+    private ContentObserver mObserver;
     boolean[] checked = new boolean[] { false, false, false, false, false,
             false, false };
     int repeatType = 0;
@@ -80,29 +81,16 @@ public class TimeSetActivity extends Activity implements
         }
         mList = (ListView) findViewById(android.R.id.list);
         updateListView();
-        mNotifier = new TimeChangeNotifier();
-        mNotifier.registerTimeChangedListener(this, mTimeChangedListener = new TimeChangedListener() {
+        getContentResolver().registerContentObserver(
+                Settings.System.CONTENT_URI, true, mObserver = new ContentObserver(new Handler()) {
 
-            @Override
-            public void onTimeChanged() {
-                mAlarmModel.setTime(TimeSetActivity.this, mAlarmModel.getEntity().getHour(), mAlarmModel.getEntity()
-                        .getMinute(), true);
-                updateListView();
-            }
-
-            @Override
-            public void onTimeZoneChanged() {
-                mAlarmModel.setTime(TimeSetActivity.this, mAlarmModel.getEntity().getHour(), mAlarmModel.getEntity()
-                        .getMinute(), true);
-                updateListView();
-            }
-
-            @Override
-            public void onTimeFormatChanged() {
-                updateListView();
-            }
-
-        });
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        super.onChange(selfChange);
+                        updateListView();
+                    }
+              
+                });
 
         mPreference = getSharedPreferences(AlarmModel.PREFERECNE_NAME, Context.MODE_PRIVATE);
     }
@@ -232,7 +220,7 @@ public class TimeSetActivity extends Activity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mNotifier.unregisterTimeChangedListener(this, mTimeChangedListener);
+        getContentResolver().unregisterContentObserver(mObserver);
     }
 
     @Override

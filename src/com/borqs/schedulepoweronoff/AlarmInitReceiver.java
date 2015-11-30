@@ -20,7 +20,7 @@ public class AlarmInitReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         Log.d(TAG, "AlarmInitReceiver" + action);
-
+        context.startService(new Intent(context, TimeChangedService.class));
         AlarmPersistence persitence = AlarmPersistenceImpl.getInstance(context);
         List<AlarmModel> models = persitence.getAlarms();
         for (AlarmModel model : models) {

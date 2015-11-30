@@ -40,7 +40,7 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
 
             AlarmEntity offAlarm = new AlarmEntity();
             offAlarm.setEnable(false);
-            offAlarm.setHour(8);
+            offAlarm.setHour(23);
             offAlarm.setMinute(30);
             offAlarm.setWeekDays(31);// 11111
             offAlarm.setType(AlarmEntity.POWEROFF_CLOCK);

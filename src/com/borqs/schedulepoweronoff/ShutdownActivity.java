@@ -8,11 +8,9 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.borqs.schedulepoweronoff.utils.AlarmUtils;
