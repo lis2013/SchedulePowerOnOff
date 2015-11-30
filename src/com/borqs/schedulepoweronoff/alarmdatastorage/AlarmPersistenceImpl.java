@@ -36,7 +36,9 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
             onAlarm.setMinute(30);
             onAlarm.setWeekDays(127);// 1111111
             onAlarm.setType(AlarmEntity.POWERON_CLOCK);
-            putAlarm(onAlarm);
+            AlarmModel am = new AlarmModel(onAlarm);
+            am.calcRTCTime();
+            putAlarm(am);
 
             AlarmEntity offAlarm = new AlarmEntity();
             offAlarm.setEnable(false);
@@ -44,7 +46,9 @@ public class AlarmPersistenceImpl implements AlarmPersistence {
             offAlarm.setMinute(30);
             offAlarm.setWeekDays(31);// 11111
             offAlarm.setType(AlarmEntity.POWEROFF_CLOCK);
-            putAlarm(offAlarm);
+            am = new AlarmModel(offAlarm);
+            am.calcRTCTime();
+            putAlarm(am);
         }
 
     }

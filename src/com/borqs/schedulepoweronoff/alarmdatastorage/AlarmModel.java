@@ -43,13 +43,13 @@ public class AlarmModel {
     public boolean isRepeated() {
         return mEntity.getWeekDays() > 0;
     }
-
+    
+    public boolean isMondayToFriday(){
+        return (mEntity.getWeekDays() ^ 31) == 0;
+    }
+    
     public boolean isEveryDay() {
         return (mEntity.getWeekDays() ^ 0x7F) == 0;
-    }
-
-    public boolean isMondayToFriday() {
-        return (mEntity.getWeekDays() ^ 0x1F) == 0;
     }
 
     public boolean isPowerOn() {
@@ -80,12 +80,11 @@ public class AlarmModel {
                 context.getText(R.string.every_day).toString(), };
         if (!isRepeated())
             return result[0];
-        int repeatType = context.getSharedPreferences(PREFERECNE_NAME, Context.MODE_PRIVATE).getInt(
-                AlarmModel.CHOOSE_TYPE_KEY, 0);
-        if (repeatType == 0) {
+        
+        if (isMondayToFriday()) {
             return result[1];
         }
-        if (isEveryDay() && repeatType == 1) {
+        if (isEveryDay()) {
             return result[2];
         }
         StringBuilder sb = new StringBuilder();
