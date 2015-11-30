@@ -55,12 +55,14 @@ public class TimeSetActivity extends Activity implements
     int repeatType = 0;
 
     private SharedPreferences mPreference;
+    private int mRepeateType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_set_layout);
-        mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras().getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
+        mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras()
+                .getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
 
         mResetButton = (ImageButton) findViewById(R.id.reset_button);
         mFinishButton = (ImageButton) findViewById(R.id.finish_button);
@@ -82,17 +84,20 @@ public class TimeSetActivity extends Activity implements
         mList = (ListView) findViewById(android.R.id.list);
         updateListView();
         getContentResolver().registerContentObserver(
-                Settings.System.CONTENT_URI, true, mObserver = new ContentObserver(new Handler()) {
+                Settings.System.CONTENT_URI, true,
+                mObserver = new ContentObserver(new Handler()) {
 
                     @Override
                     public void onChange(boolean selfChange) {
                         super.onChange(selfChange);
                         updateListView();
                     }
-              
+
                 });
 
-        mPreference = getSharedPreferences(AlarmModel.PREFERECNE_NAME, Context.MODE_PRIVATE);
+        mPreference = getSharedPreferences(AlarmModel.PREFERECNE_NAME,
+                Context.MODE_PRIVATE);
+        mRepeateType = mPreference.getInt(AlarmModel.CHOOSE_TYPE_KEY, 0);
     }
 
     private void updateListView() {
@@ -100,16 +105,20 @@ public class TimeSetActivity extends Activity implements
         mList.setAdapter(adapter);
         mList.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
                 switch (position) {
-                    case 0:
-                        new TimePickerDialog(TimeSetActivity.this, TimeSetActivity.this, mAlarmModel.getEntity()
-                                .getHour(), mAlarmModel.getEntity().getMinute(), DateFormat
-                                .is24HourFormat(TimeSetActivity.this)).show();
-                        break;
-                    case 1:
-                        showDialog(REPEAT_DIALOG);
-                        break;
+                case 0:
+                    new TimePickerDialog(TimeSetActivity.this,
+                            TimeSetActivity.this, mAlarmModel.getEntity()
+                                    .getHour(), mAlarmModel.getEntity()
+                                    .getMinute(), DateFormat
+                                    .is24HourFormat(TimeSetActivity.this))
+                            .show();
+                    break;
+                case 1:
+                    showDialog(REPEAT_DIALOG);
+                    break;
                 }
             }
         });
@@ -118,7 +127,8 @@ public class TimeSetActivity extends Activity implements
     private SimpleAdapter getListAdapter() {
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
-        String[] info = { mAlarmModel.getTime(this), mAlarmModel.getRepeatedStr(this) };
+        String[] info = { mAlarmModel.getTime(this),
+                mAlarmModel.getRepeatedStr(this) };
         int[] imageids = { R.drawable.next, R.drawable.next };
         String[] second_info = { mAlarmModel.getAmPmStr(this), " " };
         List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
@@ -131,9 +141,11 @@ public class TimeSetActivity extends Activity implements
             listems.add(listem);
         }
 
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems, R.layout.time_set_list_item, new String[] {
-                "title", "info", "second_info", "imageid" }, new int[] { R.id.title_text, R.id.info_text,
-                R.id.info_second_text, R.id.show_button });
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listems,
+                R.layout.time_set_list_item, new String[] { "title", "info",
+                        "second_info", "imageid" }, new int[] {
+                        R.id.title_text, R.id.info_text, R.id.info_second_text,
+                        R.id.show_button });
         return simpleAdapter;
     }
 
@@ -142,62 +154,66 @@ public class TimeSetActivity extends Activity implements
         Dialog dialog = null;
         Builder builder = new AlertDialog.Builder(this);
         switch (id) {
-            case CUSTOM_REPEAT_DIALOG:
-                checked = mAlarmModel.getWeekDayStatus();
-                builder.setTitle(getResources().getString(R.string.custom_repeat));
-                builder.setMultiChoiceItems(R.array.week_day, checked,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                checked[which] = isChecked;
-                            }
-                        });
-                builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        mAlarmModel.setWeekDays(checked);
-                        updateListView();
-                        dialog.dismiss();
-                        dismissDialog(REPEAT_DIALOG);
-
-                    }
-                });
-                builder.setNegativeButton(getResources().getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                dismissDialog(REPEAT_DIALOG);
-                            }
-
-                        });
-                dialog = builder.create();
-                break;
-            case REPEAT_DIALOG:
-                builder.setTitle(getResources().getString(R.string.repeat));
-                builder.setSingleChoiceItems(R.array.repeat_type, mPreference.getInt(AlarmModel.CHOOSE_TYPE_KEY, 0),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mPreference.edit().putInt(AlarmModel.CHOOSE_TYPE_KEY, which).commit();
-                                if (which == 2) {
-                                    showDialog(CUSTOM_REPEAT_DIALOG);
-                                }
-
-                            }
-                        });
-                builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        int repeatType = mPreference.getInt(AlarmModel.CHOOSE_TYPE_KEY, -1);
-                        if (repeatType == 0) {
-                            mAlarmModel.setWeekDays(MONDAY_TO_FRIDAY);
-                        } else if (repeatType == 1) {
-                            mAlarmModel.setWeekDays(EVERY_DAY);
+        case CUSTOM_REPEAT_DIALOG:
+            checked = mAlarmModel.getWeekDayStatus();
+            builder.setTitle(getResources().getString(R.string.custom_repeat));
+            builder.setMultiChoiceItems(R.array.week_day, checked,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        public void onClick(DialogInterface dialog, int which,
+                                boolean isChecked) {
+                            checked[which] = isChecked;
                         }
-                        updateListView();
-                    }
-                });
-                dialog = builder.create();
-                break;
+                    });
+            builder.setPositiveButton(getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            mAlarmModel.setWeekDays(checked);
+                            updateListView();
+                            dialog.dismiss();
+                            dismissDialog(REPEAT_DIALOG);
+
+                        }
+                    });
+            builder.setNegativeButton(
+                    getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            dismissDialog(REPEAT_DIALOG);
+                        }
+
+                    });
+            dialog = builder.create();
+            break;
+        case REPEAT_DIALOG:
+            builder.setTitle(getResources().getString(R.string.repeat));
+            builder.setSingleChoiceItems(R.array.repeat_type, mRepeateType,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mRepeateType = which;
+                            if (which == 2) {
+                                showDialog(CUSTOM_REPEAT_DIALOG);
+                            }
+
+                        }
+                    });
+            builder.setPositiveButton(getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface,
+                                int which) {
+                            if (mRepeateType == 0) {
+                                mAlarmModel.setWeekDays(MONDAY_TO_FRIDAY);
+                            } else if (mRepeateType == 1) {
+                                mAlarmModel.setWeekDays(EVERY_DAY);
+                            }
+                            updateListView();
+                        }
+                    });
+            dialog = builder.create();
+            break;
         }
         return dialog;
     }
@@ -205,9 +221,9 @@ public class TimeSetActivity extends Activity implements
     @Override
     public void onPrepareDialog(int id, Dialog dialog) {
         switch (id) {
-            case CUSTOM_REPEAT_DIALOG:
-                removeDialog(id);
-                break;
+        case CUSTOM_REPEAT_DIALOG:
+            removeDialog(id);
+            break;
         }
         super.onPrepareDialog(id, dialog);
     }
@@ -233,16 +249,16 @@ public class TimeSetActivity extends Activity implements
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.reset_button:
-                finish();
-                break;
-            case R.id.finish_button:
-                enableAlarm();
-                finish();
-                break;
-            case R.id.home_button:
-                launchHome();
-                break;
+        case R.id.reset_button:
+            finish();
+            break;
+        case R.id.finish_button:
+            enableAlarm();
+            finish();
+            break;
+        case R.id.home_button:
+            launchHome();
+            break;
         }
 
     }
@@ -251,16 +267,18 @@ public class TimeSetActivity extends Activity implements
     public boolean onTouch(View v, MotionEvent event) {
         int id = v.getId();
         switch (id) {
-            case R.id.reset_menu:
-                finish();
-                break;
-            case R.id.finish_menu:
-                enableAlarm();
-                finish();
-                break;
-            case R.id.home_menu:
-                launchHome();
-                break;
+        case R.id.reset_menu:
+            finish();
+            break;
+        case R.id.finish_menu:
+            mPreference.edit().putInt(AlarmModel.CHOOSE_TYPE_KEY, mRepeateType)
+                    .commit();
+            enableAlarm();
+            finish();
+            break;
+        case R.id.home_menu:
+            launchHome();
+            break;
         }
         return false;
     }
