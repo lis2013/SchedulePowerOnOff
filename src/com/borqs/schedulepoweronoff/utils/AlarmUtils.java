@@ -84,7 +84,7 @@ public class AlarmUtils {
             powerOnPendingIntentCache = null;
         }
         Log.d(TAG,
-                "Unregister alarm event, power on alarm event: "
+                "Unregister alarm event, is power on alarm event: "
                         + model.isPowerOn());
     }
 
