@@ -43,11 +43,11 @@ public class AlarmModel {
     public boolean isRepeated() {
         return mEntity.getWeekDays() > 0;
     }
-    
+
     public boolean isMondayToFriday(){
         return (mEntity.getWeekDays() ^ 31) == 0;
     }
-    
+
     public boolean isEveryDay() {
         return (mEntity.getWeekDays() ^ 0x7F) == 0;
     }
@@ -87,7 +87,7 @@ public class AlarmModel {
     }
 
     /**
-     * 
+     *
      * @param weekDay
      *            start from 0
      * @return
@@ -205,7 +205,7 @@ public class AlarmModel {
 
     /**
      * enable clock
-     * 
+     *
      * @param persistence
      * @param enable
      */

@@ -94,7 +94,6 @@ public class TimeSetActivity extends Activity implements
                     }
 
                 });
-      
     }
 
     private void updateListView() {
@@ -194,7 +193,6 @@ public class TimeSetActivity extends Activity implements
                             }else{
                                 mPreference.setChooseType(which);
                             }
-                       
                         }
                     });
             builder.setPositiveButton(getResources().getString(R.string.ok),

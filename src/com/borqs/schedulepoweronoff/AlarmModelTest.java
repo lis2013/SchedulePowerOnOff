@@ -33,7 +33,7 @@ public class AlarmModelTest {
 		am = new AlarmModel(ae);
 		am.calcRTCTime();
 		ret = am.getEntity().getTime();
-		
+
 		ae = new AlarmEntity();
 		ae.setHour(3);
 		ae.setMinute(30);
@@ -41,7 +41,7 @@ public class AlarmModelTest {
 		am = new AlarmModel(ae);
 		am.calcRTCTime();
 		ret = am.getEntity().getTime();
-		
+
 		ae = new AlarmEntity();
 		ae.setHour(3);
 		ae.setMinute(30);

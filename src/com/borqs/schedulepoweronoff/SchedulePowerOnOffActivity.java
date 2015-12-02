@@ -28,7 +28,7 @@ public class SchedulePowerOnOffActivity extends Activity implements
     private ListView mList;
     private List<AlarmModel> mAlarmModel;
     private ContentObserver mObserver;
-    
+
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.power_on_off_activity_layout);

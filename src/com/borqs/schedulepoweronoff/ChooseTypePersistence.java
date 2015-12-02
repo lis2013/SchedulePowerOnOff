@@ -30,20 +30,20 @@ public class ChooseTypePersistence {
             }
         }
     }
-    
+
     public int getType(){
         return mRepeateType;
     }
-    
+
     public void save(){
         mPreference.edit().putInt(AlarmModel.CHOOSE_TYPE_KEY, mRepeateType)
         .commit();
     }
-    
+
     public void setChooseType(int type){
         mRepeateType = type;
     }
-    
+
     public String getRepeatStr(Context context) {
         String[] result = new String[] { context.getString(R.string.never),
                 context.getResources().getStringArray(R.array.repeat_type)[0],

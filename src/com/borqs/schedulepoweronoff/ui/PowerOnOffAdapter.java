@@ -30,7 +30,7 @@ public class PowerOnOffAdapter extends BaseAdapter {
 		this.mInflater = LayoutInflater.from(context);
 		mAlarmModelList = alarmModel;
 		mContext = context;
-	
+
 	}
 
 	@Override
