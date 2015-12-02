@@ -23,8 +23,6 @@ public class PowerOnOffAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<AlarmModel> mAlarmModelList;
 	private Context mContext;
-	private ChooseTypePersistence mPersistence;
-
 	public PowerOnOffAdapter(Context context, List<AlarmModel> alarmModel) {
 		super();
 		this.mInflater = LayoutInflater.from(context);

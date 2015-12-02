@@ -17,7 +17,7 @@ public class AlarmModel {
 	private static final String CONCAT_REPEATED_SPLITOR = " ";
 	private static final int WEEK_DAY_COUNT = 7;
     public static final String PREFERECNE_NAME = "set_type";
-    public static final String CHOOSE_TYPE_KEY = "choose_type";
+ 
 	private AlarmEntity mEntity;
 
     public AlarmModel(AlarmEntity e) {
