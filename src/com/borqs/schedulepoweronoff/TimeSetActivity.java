@@ -10,10 +10,8 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +41,11 @@ public class TimeSetActivity extends Activity implements
 
     private static final boolean[] EVERY_DAY = new boolean[] { true, true,
             true, true, true, true, true };
+
+    private static final int CHOOSE_MONDAY_TO_FRIDAY = 0;
+    private static final int CHOOSE_EVERY_DAY = 1;
+    private static final int CHOOSE_CUSTOM = 2;
+
     private ListView mList;
     private int mTimeType;
     private ImageButton mResetButton, mHomebutton, mFinishButton;
@@ -53,10 +56,8 @@ public class TimeSetActivity extends Activity implements
     private ContentObserver mObserver;
     boolean[] checked = new boolean[] { false, false, false, false, false,
             false, false };
-    int repeatType = 0;
 
-    private SharedPreferences mPreference;
-    private int mRepeateType;
+    private ChooseTypePersistence mPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class TimeSetActivity extends Activity implements
         setContentView(R.layout.time_set_layout);
         mAlarmModel = AlarmModel.convertToObj(getIntent().getExtras()
                 .getString(AlarmUtils.EXTRA_ALARM_DATA_NAME));
+        mPreference = new ChooseTypePersistence(this, mAlarmModel);
 
         mResetButton = (ImageButton) findViewById(R.id.reset_button);
         mFinishButton = (ImageButton) findViewById(R.id.finish_button);
@@ -96,10 +98,7 @@ public class TimeSetActivity extends Activity implements
                     }
 
                 });
-
-        mPreference = getSharedPreferences(AlarmModel.PREFERECNE_NAME,
-                Context.MODE_PRIVATE);
-        mRepeateType = mPreference.getInt(AlarmModel.CHOOSE_TYPE_KEY, 0);
+      
     }
 
     private void updateListView() {
@@ -129,8 +128,7 @@ public class TimeSetActivity extends Activity implements
     private SimpleAdapter getListAdapter() {
         String[] title = { this.getResources().getString(R.string.time_text),
                 this.getResources().getString(R.string.repeat) };
-        String[] info = { mAlarmModel.getTime(this),
-                mAlarmModel.getRepeatedStr(this) };
+        String[] info = { mAlarmModel.getTime(this), mPreference.getRepeatStr(this) };
         int[] imageids = { R.drawable.next, R.drawable.next };
         String[] second_info = { mAlarmModel.getAmPmStr(this), " " };
         List<Map<String, Object>> listems = new ArrayList<Map<String, Object>>();
@@ -172,7 +170,7 @@ public class TimeSetActivity extends Activity implements
                             mAlarmModel.setWeekDays(checked);
                             updateListView();
                             dialog.dismiss();
-                            dismissDialog(REPEAT_DIALOG);
+                            removeDialog(REPEAT_DIALOG);
 
                         }
                     });
@@ -182,7 +180,7 @@ public class TimeSetActivity extends Activity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            dismissDialog(REPEAT_DIALOG);
+                            removeDialog(REPEAT_DIALOG);
                         }
 
                     });
@@ -190,15 +188,15 @@ public class TimeSetActivity extends Activity implements
             break;
         case REPEAT_DIALOG:
             builder.setTitle(getResources().getString(R.string.repeat));
-            builder.setSingleChoiceItems(R.array.repeat_type, mRepeateType,
+            builder.setSingleChoiceItems(R.array.repeat_type, mPreference.getType(),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mRepeateType = which;
+                              mPreference.setChooseType(which);
                             if (which == 2) {
                                 showDialog(CUSTOM_REPEAT_DIALOG);
                             }
-
+                       
                         }
                     });
             builder.setPositiveButton(getResources().getString(R.string.ok),
@@ -206,12 +204,14 @@ public class TimeSetActivity extends Activity implements
                         @Override
                         public void onClick(DialogInterface dialogInterface,
                                 int which) {
-                            if (mRepeateType == 0) {
+                            if (mPreference.getType() == CHOOSE_MONDAY_TO_FRIDAY) {
                                 mAlarmModel.setWeekDays(MONDAY_TO_FRIDAY);
-                            } else if (mRepeateType == 1) {
+                            } else if (mPreference.getType() == CHOOSE_EVERY_DAY) {
                                 mAlarmModel.setWeekDays(EVERY_DAY);
                             }
                             updateListView();
+                            removeDialog(REPEAT_DIALOG);
+
                         }
                     });
             dialog = builder.create();
@@ -273,8 +273,6 @@ public class TimeSetActivity extends Activity implements
             finish();
             break;
         case R.id.finish_menu:
-            mPreference.edit().putInt(AlarmModel.CHOOSE_TYPE_KEY, mRepeateType)
-                    .commit();
             enableAlarm();
             finish();
             break;
@@ -292,6 +290,7 @@ public class TimeSetActivity extends Activity implements
     }
 
     private void enableAlarm() {
+        mPreference.save();
         mAlarmModel.enable(this, true);
         AlarmUtils.toastAlarmPeriod(this, mAlarmModel);
     }

@@ -3,6 +3,7 @@ package com.borqs.schedulepoweronoff;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
@@ -27,12 +28,11 @@ public class SchedulePowerOnOffActivity extends Activity implements
     private ListView mList;
     private List<AlarmModel> mAlarmModel;
     private ContentObserver mObserver;
-
+    
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.power_on_off_activity_layout);
         mList = (ListView) findViewById(android.R.id.list);
-
         getContentResolver().registerContentObserver(
                 Settings.System.CONTENT_URI, true,
                 mObserver = new ContentObserver(new Handler()) {

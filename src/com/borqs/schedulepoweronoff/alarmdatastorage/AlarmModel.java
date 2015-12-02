@@ -74,19 +74,7 @@ public class AlarmModel {
         return mEntity.isEnable();
     }
 
-    public String getRepeatedStr(Context context) {
-        String[] result = new String[] { context.getString(R.string.never),
-                context.getResources().getStringArray(R.array.repeat_type)[0],
-                context.getText(R.string.every_day).toString(), };
-        if (!isRepeated())
-            return result[0];
-        
-        if (isMondayToFriday()) {
-            return result[1];
-        }
-        if (isEveryDay()) {
-            return result[2];
-        }
+    public String getWeekDayStr(Context context) {
         StringBuilder sb = new StringBuilder();
         String[] dayTStrings = context.getResources().getStringArray(R.array.week_day);
         for (int i = 0; i < dayTStrings.length; i++) {

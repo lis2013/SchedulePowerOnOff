@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.borqs.schedulepoweronoff.ChooseTypePersistence;
 import com.borqs.schedulepoweronoff.R;
 import com.borqs.schedulepoweronoff.alarmdatastorage.AlarmModel;
 
@@ -22,12 +23,14 @@ public class PowerOnOffAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<AlarmModel> mAlarmModelList;
 	private Context mContext;
+	private ChooseTypePersistence mPersistence;
 
 	public PowerOnOffAdapter(Context context, List<AlarmModel> alarmModel) {
 		super();
 		this.mInflater = LayoutInflater.from(context);
 		mAlarmModelList = alarmModel;
 		mContext = context;
+	
 	}
 
 	@Override
@@ -68,6 +71,7 @@ public class PowerOnOffAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		final AlarmModel alarmModel = mAlarmModelList.get(position);
+		ChooseTypePersistence  mPersistence = new ChooseTypePersistence(mContext, alarmModel);
 		if (convertView == null) {
 			convertView = mInflater.inflate(
 					R.layout.power_on_off_time_list_item, parent, false);
@@ -93,7 +97,7 @@ public class PowerOnOffAdapter extends BaseAdapter {
 		holder.typeTitle.setText(resId);
 		holder.typeTitle.setTextColor(color);
 		showTime(alarmModel, holder.timeFormat, holder.setTime);
-		holder.weekDays.setText(alarmModel.getRepeatedStr(mContext));
+		holder.weekDays.setText(mPersistence.getRepeatStr(mContext));
 		holder.sw.setChecked(alarmModel.isEnabled());
 		holder.sw.setOnClickListener(new OnClickListener() {
 			@Override
