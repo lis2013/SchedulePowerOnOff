@@ -167,7 +167,7 @@ public class TimeSetActivity extends Activity implements
                             updateListView();
                             dialog.dismiss();
                             removeDialog(REPEAT_DIALOG);
-
+                            mPreference.setChooseType(ChooseTypePersistence.CHOOSE_CUSTOM);
                         }
                     });
             builder.setNegativeButton(
@@ -188,9 +188,11 @@ public class TimeSetActivity extends Activity implements
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                              mPreference.setChooseType(which);
+                            
                             if (which == ChooseTypePersistence.CHOOSE_CUSTOM) {
                                 showDialog(CUSTOM_REPEAT_DIALOG);
+                            }else{
+                                mPreference.setChooseType(which);
                             }
                        
                         }
