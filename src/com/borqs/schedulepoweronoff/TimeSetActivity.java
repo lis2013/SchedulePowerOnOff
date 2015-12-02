@@ -94,7 +94,6 @@ public class TimeSetActivity extends Activity implements
                     }
 
                 });
-      
     }
 
     private void updateListView() {
@@ -192,7 +191,6 @@ public class TimeSetActivity extends Activity implements
                             if (which == ChooseTypePersistence.CHOOSE_CUSTOM) {
                                 showDialog(CUSTOM_REPEAT_DIALOG);
                             }
-                       
                         }
                     });
             builder.setPositiveButton(getResources().getString(R.string.ok),
