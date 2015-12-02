@@ -42,10 +42,6 @@ public class TimeSetActivity extends Activity implements
     private static final boolean[] EVERY_DAY = new boolean[] { true, true,
             true, true, true, true, true };
 
-    private static final int CHOOSE_MONDAY_TO_FRIDAY = 0;
-    private static final int CHOOSE_EVERY_DAY = 1;
-    private static final int CHOOSE_CUSTOM = 2;
-
     private ListView mList;
     private int mTimeType;
     private ImageButton mResetButton, mHomebutton, mFinishButton;
@@ -193,7 +189,7 @@ public class TimeSetActivity extends Activity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                               mPreference.setChooseType(which);
-                            if (which == 2) {
+                            if (which == ChooseTypePersistence.CHOOSE_CUSTOM) {
                                 showDialog(CUSTOM_REPEAT_DIALOG);
                             }
                        
@@ -204,9 +200,9 @@ public class TimeSetActivity extends Activity implements
                         @Override
                         public void onClick(DialogInterface dialogInterface,
                                 int which) {
-                            if (mPreference.getType() == CHOOSE_MONDAY_TO_FRIDAY) {
+                            if (mPreference.getType() == ChooseTypePersistence.CHOOSE_MONDAY_TO_FRIDAY) {
                                 mAlarmModel.setWeekDays(MONDAY_TO_FRIDAY);
-                            } else if (mPreference.getType() == CHOOSE_EVERY_DAY) {
+                            } else if (mPreference.getType() == ChooseTypePersistence.CHOOSE_EVERY_DAY) {
                                 mAlarmModel.setWeekDays(EVERY_DAY);
                             }
                             updateListView();

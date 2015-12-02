@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 
 public class ChooseTypePersistence {
 
-    private static final int CHOOSE_MONDAY_TO_FRIDAY = 0;
-    private static final int CHOOSE_EVERY_DAY = 1;
-    private static final int CHOOSE_CUSTOM = 2;
+    public static final int CHOOSE_MONDAY_TO_FRIDAY = 0;
+    public static final int CHOOSE_EVERY_DAY = 1;
+    public static final int CHOOSE_CUSTOM = 2;
 
     private SharedPreferences mPreference;
     private int mRepeateType;
