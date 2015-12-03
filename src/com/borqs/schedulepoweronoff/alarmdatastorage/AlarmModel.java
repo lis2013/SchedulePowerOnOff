@@ -14,11 +14,10 @@ import com.borqs.schedulepoweronoff.utils.GSONUtils;
 
 public class AlarmModel {
     private static final String TAG = AlarmModel.class.getSimpleName();
-	private static final String CONCAT_REPEATED_SPLITOR = " ";
-	private static final int WEEK_DAY_COUNT = 7;
+    private static final String CONCAT_REPEATED_SPLITOR = " ";
+    private static final int WEEK_DAY_COUNT = 7;
     public static final String PREFERECNE_NAME = "set_type";
- 
-	private AlarmEntity mEntity;
+    private AlarmEntity mEntity;
 
     public AlarmModel(AlarmEntity e) {
         mEntity = e;

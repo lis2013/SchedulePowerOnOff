@@ -10,7 +10,7 @@ public class ChooseTypePersistence {
     public static final int CHOOSE_MONDAY_TO_FRIDAY = 0;
     public static final int CHOOSE_EVERY_DAY = 1;
     public static final int CHOOSE_CUSTOM = 2;
-    
+
     public static final String CHOOSE_ON_TYPE_KEY = "choose_off_type";
     public static final String CHOOSE_OFF_TYPE_KEY = "choose_on_type";
 
@@ -20,8 +20,7 @@ public class ChooseTypePersistence {
 
     public ChooseTypePersistence(Context ctx, AlarmModel model) {
         mModel = model;
-        mPreference = ctx.getSharedPreferences(AlarmModel.PREFERECNE_NAME,
-                Context.MODE_PRIVATE);
+        mPreference = ctx.getSharedPreferences(AlarmModel.PREFERECNE_NAME, Context.MODE_PRIVATE);
         mRepeateType = mPreference.getInt(getKey(), -1);
         if (mRepeateType == -1) {
             if (model.isMondayToFriday()) {
@@ -33,21 +32,20 @@ public class ChooseTypePersistence {
             }
         }
     }
-    
-    private String getKey(){
+
+    private String getKey() {
         return mModel.isPowerOff() ? CHOOSE_OFF_TYPE_KEY : CHOOSE_ON_TYPE_KEY;
     }
-    
-    public int getType(){
+
+    public int getType() {
         return mRepeateType;
     }
 
-    public void save(){
-        mPreference.edit().putInt(getKey(), mRepeateType)
-        .commit();
+    public void save() {
+        mPreference.edit().putInt(getKey(), mRepeateType).commit();
     }
 
-    public void setChooseType(int type){
+    public void setChooseType(int type) {
         mRepeateType = type;
     }
 
