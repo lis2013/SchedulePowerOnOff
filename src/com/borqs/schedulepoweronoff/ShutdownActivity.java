@@ -112,6 +112,7 @@ public class ShutdownActivity extends Activity {
             Bundle args = new Bundle();
             args.putInt(KEY_TITLE, titleId);
             fragment.setArguments(args);
+            fragment.setCancelable(false);
             return fragment;
         }
 
@@ -119,7 +120,7 @@ public class ShutdownActivity extends Activity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             mActivity = ((ShutdownActivity) getActivity());
             int titleId = getArguments().getInt(KEY_TITLE);
-            return new AlertDialog.Builder(getActivity())
+            Dialog dialog = new AlertDialog.Builder(getActivity())
                     .setTitle(titleId)
                     .setMessage(
                             getResources()
@@ -145,7 +146,10 @@ public class ShutdownActivity extends Activity {
                                     mActivity.timer.cancel();
                                     mActivity.finish();
                                 }
-                            }).create();
+                            })
+                    .create();
+            dialog.setCanceledOnTouchOutside(false);
+            return dialog;
         }
     }
 }
