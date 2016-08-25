@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="schedule_power_on_off_title">Schedule power on &amp; off</string>
+    <string name="schedule_power_on_off_set">Set schedule power on &amp; off</string>
+    <string name="every_day">Every day</string>
+    <string name="never">Never</string>
+    <string name="shutdown_dialog_title">Power Off</string>
+    <string name="shutdown_dialog_message">Shut down system in <xliff:g id="time">%1$d</xliff:g> seconds.</string>
+    <string name="power_on_second_title">"Power on Time"</string>
+    <string name="power_off_second_title">"Power off Time"</string>
+    <string name="set_power_on">Set Power On</string>
+    <string name="set_power_off">Set Power Off</string>
+    <string name="reset">"Reset"</string>
+    <string name="finish">"Finish"</string>
+    <string name="time_text">"Time"</string>
+    <string name="repeat">"Repeat"</string>
+    <string name="custom_repeat">"Custom repeat"</string>
+    <string name="ok">"OK"</string>
+    <string name="cancel">"Cancel"</string>
+    <string name="home">"Home"</string>
+    <string name="time_format_morning">"AM"</string>
+    <string name="time_format_afternoon">"PM"</string>
+
+    <string-array name="week_day">
+        <item>Mon.</item>
+        <item>Tues.</item>
+        <item>Wed.</item>
+        <item>Thur.</item>
+        <item>Fri.</item>
+        <item>Sat.</item>
+        <item>Sun.</item>
+    </string-array>
+    <string-array name="repeat_type">
+        <item>Monday to Friday</item>
+        <item>Every day</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string name="days">&#160;<xliff:g id="day">%1d</xliff:g>days</string>
+    <string name="hours">&#160;<xliff:g id="hour">%1$d</xliff:g>hours</string>
+    <string name="minutes">&#160;<xliff:g id="minutes">%1$d</xliff:g>miniutes</string>
+    <string name="time_power_on">Power on is set for<xliff:g id="power_on_time">%1$s</xliff:g> from now.</string>
+    <string name="time_power_off">Power off is set for<xliff:g id="power_off_time">%1$s</xliff:g> from now.</string>
+
+</resources>
